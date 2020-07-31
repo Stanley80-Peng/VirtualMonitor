@@ -1,0 +1,10 @@
+default planner path: '../2020-07-28-16-31-11'
+map path: '../maps' (cannot be edited in running)
+default map to show: '73632'
+default show mode: 'shadow' (planner/shadow/*empty*)
+default auto clear time: '60' seconds
+planner mode log-writing: '1' log(s) per second
+planner mode speed 1x means playing: '1' second(s) per second
+shadow mode log-writing: '162' log(s) per second
+shadow mode speed 1x means playing: '0.1' second(s) per second
+max image refresh rate: '30' frames per second (depend on the graphic card on your computer)

@@ -1,3 +1,9 @@
+# Files and data sets used to test
+.csv
+planner
+maps
+ShadowData
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
