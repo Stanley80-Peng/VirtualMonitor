@@ -16,12 +16,19 @@ class Ui_ToolWindow(Ui_Form):
         self.globals()
         self.connectButtons()
         self.getDefaults()
+        self.checkMapFolder()
+
+    def checkMapFolder(self):
+        if not os.path.exists(self.mapPath):
+            QMessageBox.information(None, '', 'Please set the correct map path in \"config.txt\"')
+            exit(1)
 
     def globals(self):
         self.mapPath = None
         self.mes = Queue()
         self.mapid = None
         self.isRunning = False
+        self.filepath = None
 
     def connectButtons(self):
         self.button_browse.clicked.connect(self.browse)
@@ -69,9 +76,20 @@ class Ui_ToolWindow(Ui_Form):
 
     def init(self):
         print('init')
-        # 需要添加验证事项
         self.mapid = self.lineEdit_mapid.text()
         self.filepath = self.lineEdit_filepath.text()
+
+        if not os.path.exists(self.mapPath + '/' + str(self.mapid) + '.png'):
+            QMessageBox.information(None, '', 'No available map in the \"maps\" folder!')
+            return
+
+        if not os.path.exists(self.filepath):
+            QMessageBox.information(None, '', 'Path does not exist!')
+            return
+
+        if not os.path.isdir(self.filepath):
+            QMessageBox.information(None, '', 'Please select a folder!')
+            return
 
         if self.radio_planner.isChecked():
             proc_data_in_planner_mode = Data_planner(self.filepath)
@@ -84,10 +102,6 @@ class Ui_ToolWindow(Ui_Form):
 
     def start(self):
         print('start')
-        if not self.mes.empty():
-            self.isRunning = False
-            while not self.mes.empty():
-                self.mes.get()
         if self.isRunning:  # 为防止将start误认为resume按下而新建模拟窗口，特设此检查
             QMessageBox.information(None, '', 'Animation is already running')
             return
