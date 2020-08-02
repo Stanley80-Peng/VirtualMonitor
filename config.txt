@@ -8,3 +8,6 @@ planner mode speed 1x means playing: '1' second(s) per second
 shadow mode log-writing: '162' log(s) per second
 shadow mode speed 1x means playing: '0.1' second(s) per second
 max image refresh rate: '30' frames per second (depend on the graphic card on your computer)
+
+
+# 请在每行的单引号之间修改数据
