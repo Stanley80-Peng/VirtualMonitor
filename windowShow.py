@@ -39,7 +39,7 @@ class Ui_ToolWindow(Ui_Form):
         self.button_forw15.clicked.connect(lambda: self.jump(str(15)))
         self.button_forw10.clicked.connect(lambda: self.jump(str(600)))
         self.button_forw1h.clicked.connect(lambda: self.jump(str(3600)))
-        self.button_back15.clicked.connect(lambda: self.jump(str(-15)))
+        self.button_back15.clicked.connect(lambda: self.jump(str(-3)))
         self.button_back3.clicked.connect(lambda: self.jump(str(-180)))
         self.button_back30.clicked.connect(lambda: self.jump(str(-1800)))
         self.button_skip.clicked.connect(lambda: self.putMes('skip'))
