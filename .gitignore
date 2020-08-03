@@ -5,6 +5,7 @@ venv/
 planner/
 ShadowData/
 positions/
+maps/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
