@@ -1,4 +1,4 @@
-default planner path: 'ShadowData/2020-07-28-16-31-11'
+default planner path: 'ShadowData/2020-07-31-17-04-52'
 map path: 'maps' (cannot be edited in running)
 default map to show: '11002'
 default show mode: 'shadow' (planner/shadow)
