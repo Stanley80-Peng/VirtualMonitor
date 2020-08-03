@@ -1,7 +1,7 @@
 # Files and data sets used to test
 .csv
 .idea
-venv
+venv/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
