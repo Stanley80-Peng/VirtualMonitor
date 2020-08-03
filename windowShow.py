@@ -48,7 +48,7 @@ class Ui_ToolWindow(Ui_Form):
         self.button_stamp.clicked.connect(lambda: self.putMes('stamp'))
 
     def getDefaults(self):
-        f = open('config.txt', 'r')
+        f = open('config.txt', 'r', encoding='UTF-8')
         if not f:
             print('Fail to open\'config.txt\'')
             return

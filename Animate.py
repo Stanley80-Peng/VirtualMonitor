@@ -33,7 +33,7 @@ class Animate(object):
         self.get_config()
 
     def get_config(self):
-        f = open('config.txt', 'r')
+        f = open('config.txt', 'r', encoding='UTF-8')
         lines = f.readlines()
         self.d['auto_del'] = int(lines[4].split('\'')[1])
         self.d['max_fps'] = int(lines[9].split('\'')[1])
@@ -59,7 +59,7 @@ class Animate(object):
         '''for file in DIR:
             print(file)'''
         for file in DIR:
-            with open('./positions_planner/' + file) as f:
+            with open('./positions_planner/' + file, encoding='UTF-8') as f:
                 self.proc_csv_plan(f)
         return str(self.d['dataCount'])
 
@@ -98,7 +98,7 @@ class Animate(object):
         f.close()
 
     def get_excur(self, mapid):
-        conf = open('config.txt', 'r')
+        conf = open('config.txt', 'r', encoding='UTF-8')
         conf.readline()
         line = conf.readline()
         self.d['mapPath'] = line.split('\'')[1]

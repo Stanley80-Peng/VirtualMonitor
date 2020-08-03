@@ -8,7 +8,7 @@ class Data_slam(object):
 
 def procShadow(path):
     in_file = open(path + '/' + 'slamRecord.bin', 'rb')
-    out_file = open('./positions_shadow.csv', 'w')
+    out_file = open('./positions_shadow.csv', 'w', encoding='UTF-8')
     # out_file.write('sec,nsec,x,y,z,q0,q1,q2,q3\n')  #
     while True:
         temp = in_file.read(4)
