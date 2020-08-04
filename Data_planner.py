@@ -43,7 +43,8 @@ def proc_file(path, filename):
         v_list.append(v_omega[0][1:])
         
     def write_csv(name):  # 把有用的数据写到positions文件夹内的csv文件中
-
+        if not os.path.exists('./positions'):
+            os.mkdir('./positions')
         if not os.path.exists('./positions/planner'):
             os.mkdir('./positions/planner')
         out_file = open('./positions/planner/' + name + '.csv', 'w', encoding='UTF-8')

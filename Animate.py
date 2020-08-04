@@ -218,12 +218,12 @@ class Animate(object):
             time.sleep(self.d['sleepTime'] / float(1000))
             return line, point, txt, arrow,
 
-        fig, ax = plt.subplots(figsize=(self.imgWidth / 200, self.imgHeight / 200))
-        line, = ax.plot([], [], linewidth=3)
+        fig, ax = plt.subplots(figsize=(self.imgWidth / 400, self.imgHeight / 400))
+        line, = ax.plot([], [], linewidth=2)
         point, = ax.plot([], [], 'o', markersize=10)
-        arrow, = ax.plot([], [], linewidth=3, color='green')
-        border, = ax.plot([], [], linewidth=2, color='black')
-        txt = ax.text(10, 200, '  ', fontsize=16)
+        arrow, = ax.plot([], [], linewidth=2, color='green')
+        border, = ax.plot([], [], linewidth=1, color='black')
+        txt = ax.text(10, 200, '  ', fontsize=10)
         adjustFrame(1)
         ani = FuncAnimation(fig, update, frames=[i for i in range(0, 10000)],
                             interval=1, blit=True, repeat=True)
