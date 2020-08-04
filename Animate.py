@@ -1,6 +1,6 @@
 import os
 import time
-import math
+from math import *
 import matplotlib.pyplot as plt
 from PIL import Image
 from matplotlib.animation import FuncAnimation
@@ -48,8 +48,8 @@ class Animate(object):
         else:
             self.logSpeed = int(lines[7].split('\'')[1])
             self.baseSpeed = float(lines[8].split('\'')[1])
-        self.len_robot = int(lines[10].split('\'')[1])
-        self.wid_robot = int(lines[10].split('\'')[3])
+        self.len_robot = int(lines[10].split('\'')[1]) / 2
+        self.wid_robot = int(lines[10].split('\'')[3]) / 2
         f.close()
 
     def getData(self, mapid):
@@ -136,13 +136,13 @@ class Animate(object):
 
         def adjustFrame(speed):
             sec_incre = float(speed) * float(self.baseSpeed) * float(self.logSpeed)
-            self.sing_incre = math.ceil(sec_incre / float(self.max_fps))
+            self.sing_incre = ceil(sec_incre / float(self.max_fps))
             actual_rate = sec_incre / float(self.sing_incre)
             self.sleepTime = float(1000) / actual_rate - 20
 
         def ajustFrame(speed):
-            self.sing_incre = math.ceil(float(speed) * float(self.baseSpeed)
-                                        * float(self.logSpeed) / float(self.max_fps))
+            self.sing_incre = ceil(float(speed) * float(self.baseSpeed)
+                                   * float(self.logSpeed) / float(self.max_fps))
             self.sleepTime = float(1000) * float(self.sing_incre) / float(speed) \
                              / float(self.baseSpeed) / float(self.logSpeed) - 1
 
@@ -175,7 +175,7 @@ class Animate(object):
             if not mes.empty():
                 message = mes.get()
                 if message == 'pause':
-                    self.pause_flag = True if not self.pause_flag is True else False
+                    self.pause_flag = True if self.pause_flag is False else False
                 elif message == 'jump':
                     jump()
                 elif message == 'speed':
@@ -197,17 +197,27 @@ class Animate(object):
         def get_arrow():
             return [[self.x_list[self.end_index],
                      self.x_list[self.end_index] +
-                     math.cos(self.theta_list[self.end_index]) * self.len_robot / 4],
+                     cos(self.theta_list[self.end_index]) * self.len_robot / 4],
                     [self.y_list[self.end_index],
                      self.y_list[self.end_index] +
-                     math.sin(self.theta_list[self.end_index]) * self.len_robot / 4]]
+                     sin(self.theta_list[self.end_index]) * self.len_robot / 4]]
 
         def get_border():
-            points = [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0]]
-            phi = math.atan(self.wid_robot / self.len_robot)
+            points_x = [0, 0, 0, 0, 0]
+            points_y = [0, 0, 0, 0, 0]
+            phi = atan(self.wid_robot / self.len_robot)
             theta_A = self.theta_list[self.end_index] - phi
-            half_diag = math.sqrt(self.d[''])
-            return points
+            half_diag = sqrt(pow(self.len_robot, 2) + pow(self.wid_robot, 2)) / 2
+            points_x[0] = points_x[4] = half_diag * cos(theta_A) + self.x_list[self.end_index]
+            points_y[0] = points_y[4] = half_diag * sin(theta_A) + self.y_list[self.end_index]
+            theta_B = pi - self.theta_list[self.end_index] - phi
+            points_x[1] = half_diag * cos(theta_B) + self.x_list[self.end_index]
+            points_y[1] = half_diag * sin(theta_B) + self.y_list[self.end_index]
+            points_x[2] = 2 * self.x_list[self.end_index] - points_x[0]
+            points_y[2] = 2 * self.y_list[self.end_index] - points_y[0]
+            points_x[3] = 2 * self.x_list[self.end_index] - points_x[1]
+            points_y[3] = 2 * self.y_list[self.end_index] - points_y[1]
+            return points_x, points_y
 
         def update(no_use):
             check_mes()
@@ -221,15 +231,15 @@ class Animate(object):
             border_x, border_y = get_border()
             border.set_data(border_x, border_y)
 
-            point.set_data(self.x_list[self.end_index], self.y_list[self.end_index])
+            # point.set_data(self.x_list[self.end_index], self.y_list[self.end_index])
             txt.set_text(self.time_list[self.end_index])
             time.sleep(self.sleepTime / float(1000))
 
-            return line, point, txt, arrow,
+            return line, txt, arrow, border,  # point,
 
         fig, ax = plt.subplots(figsize=(self.imgWidth / 400, self.imgHeight / 400))
         line, = ax.plot([], [], linewidth=2)
-        point, = ax.plot([], [], 'o', markersize=10)
+        # point, = ax.plot([], [], 'o', markersize=10)
         arrow, = ax.plot([], [], linewidth=1, color='black')
         border, = ax.plot([], [], linewidth=1, color='black')
         txt = ax.text(10, 200, '  ', fontsize=10)
