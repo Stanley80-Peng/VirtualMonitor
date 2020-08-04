@@ -116,7 +116,7 @@ class Ui_ToolWindow(Ui_Form):
             QMessageBox.information(None, '', 'Animation is already running')
             return
 
-        self.slider_speed.setValue(1)
+        self.slider_speed.setValue(3)
         self.mapid = self.lineEdit_mapid.text()
         if not os.path.exists(self.mapPath + '/' + str(self.mapid) + '.png'):
             QMessageBox.information(None, '', 'No available map in the \"maps\" folder!\n')

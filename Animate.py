@@ -18,7 +18,7 @@ class Animate(object):
         self.mapPath = ''
         self.day_num = int(date)
         self.beg_index = int(0)
-        self.end_index = 0
+        self.end_index = 1
         self.dataCount = int(0)
         self.auto_del = int(0)
         self.pause_flag = False
@@ -129,8 +129,8 @@ class Animate(object):
             self.end_index += sec * self.logSpeed
             if self.end_index >= self.dataCount:
                 self.end_index = self.dataCount - 1
-            if self.end_index <= 0:
-                self.end_index = 0
+            if self.end_index <= 1:
+                self.end_index = 1
             self.beg_index = self.end_index  # 以防非自动清除路径模式下出现故障
 
         def speed():
@@ -164,15 +164,16 @@ class Animate(object):
         def getScope():
             if self.auto_del:
                 if self.end_index > self.logSpeed * self.auto_del:
-                    return self.x_list[self.end_index - self.logSpeed *
-                                       self.auto_del:self.end_index + 1], \
-                           self.y_list[self.end_index - self.logSpeed *
-                                       self.auto_del:self.end_index + 1]
+                    xsco, ysco = self.x_list[self.end_index - self.logSpeed * self.auto_del:self.end_index], \
+                           self.y_list[self.end_index - self.logSpeed * self.auto_del:self.end_index]
                 else:
-                    return self.x_list[0:self.end_index + 1], self.y_list[0:self.end_index + 1]
+                    xsco, ysco = self.x_list[0:self.end_index], self.y_list[0:self.end_index]
             else:
-                return self.x_list[self.beg_index:self.end_index + 1], \
-                       self.y_list[self.beg_index:self.end_index + 1]
+                xsco, ysco = self.x_list[self.beg_index:self.end_index], \
+                       self.y_list[self.beg_index:self.end_index]
+            xsco.append((self.x_list[self.end_index] + self.x_list[self.end_index - 1]) / 2)
+            ysco.append((self.y_list[self.end_index] + self.y_list[self.end_index - 1]) / 2)
+            return xsco, ysco
 
         def check_mes():
             if not mes.empty():
@@ -200,10 +201,10 @@ class Animate(object):
         def get_arrow():
             return [[self.x_list[self.end_index],
                      self.x_list[self.end_index] +
-                     cos(self.theta_list[self.end_index]) * self.len_robot / 4],
+                     cos(self.theta_list[self.end_index]) * self.len_robot / 2],
                     [self.y_list[self.end_index],
                      self.y_list[self.end_index] +
-                     sin(self.theta_list[self.end_index]) * self.len_robot / 4]]
+                     sin(self.theta_list[self.end_index]) * self.len_robot / 2]]
 
         def get_border():
             points_x = [0, 0, 0, 0, 0]
@@ -213,7 +214,7 @@ class Animate(object):
             half_diag = sqrt(pow(self.len_robot, 2) + pow(self.wid_robot, 2)) / 2
             points_x[0] = points_x[4] = half_diag * cos(theta_A) + self.x_list[self.end_index]
             points_y[0] = points_y[4] = half_diag * sin(theta_A) + self.y_list[self.end_index]
-            theta_B = pi - self.theta_list[self.end_index] - phi
+            theta_B = self.theta_list[self.end_index] + pi + phi
             points_x[1] = half_diag * cos(theta_B) + self.x_list[self.end_index]
             points_y[1] = half_diag * sin(theta_B) + self.y_list[self.end_index]
             points_x[2] = 2 * self.x_list[self.end_index] - points_x[0]
