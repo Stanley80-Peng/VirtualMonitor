@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import QFileDialog, QMessageBox
 from windowContents import *
 from multiprocessing import Queue
 from Animate import *
-from Data_slam import *
+from Data_shadow import *
 from Data_planner import *
 import os
 import sys
@@ -17,6 +17,10 @@ class Ui_ToolWindow(Ui_Form):
         self.connectButtons()
         self.getDefaults()
         self.checkMapFolder()
+        self.debug()
+
+    def debug(self):
+        self.lineEdit_date.setText('0731')
 
     def checkMapFolder(self):
         if not os.path.exists(self.mapPath):
@@ -39,7 +43,7 @@ class Ui_ToolWindow(Ui_Form):
         self.button_forw15.clicked.connect(lambda: self.jump(str(15)))
         self.button_forw10.clicked.connect(lambda: self.jump(str(600)))
         self.button_forw1h.clicked.connect(lambda: self.jump(str(3600)))
-        self.button_back15.clicked.connect(lambda: self.jump(str(-3)))
+        self.button_back15.clicked.connect(lambda: self.jump(str(-15)))
         self.button_back3.clicked.connect(lambda: self.jump(str(-180)))
         self.button_back30.clicked.connect(lambda: self.jump(str(-1800)))
         self.button_skip.clicked.connect(lambda: self.putMes('skip'))
@@ -102,6 +106,12 @@ class Ui_ToolWindow(Ui_Form):
 
     def start(self):
         print('start')
+
+        if not self.mes.empty():
+            self.isRunning = False
+            while not self.mes.empty():
+                self.mes.get()
+
         if self.isRunning:  # 为防止将start误认为resume按下而新建模拟窗口，特设此检查
             QMessageBox.information(None, '', 'Animation is already running')
             return
@@ -113,7 +123,7 @@ class Ui_ToolWindow(Ui_Form):
 
         if self.radio_planner.isChecked():
 
-            if not os.path.exists('./positions_planner'):
+            if not os.path.exists('./positions/planner'):
                 QMessageBox.information(None, 'ERROR', 'Please check the infos above and init!')
                 return
 
@@ -129,7 +139,7 @@ class Ui_ToolWindow(Ui_Form):
 
         elif self.radio_shadow.isChecked():
 
-            if not os.path.exists('./positions_shadow.csv'):
+            if not os.path.exists('./positions/shadow'):
                 QMessageBox.information(None, 'ERROR', 'Please check the infos above and init!')
                 return
 

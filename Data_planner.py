@@ -43,9 +43,10 @@ def proc_file(path, filename):
         v_list.append(v_omega[0][1:])
         
     def write_csv(name):  # 把有用的数据写到positions文件夹内的csv文件中
-        if not os.path.exists('./positions_planner'):
-            os.mkdir('./positions_planner')
-        out_file = open('./positions_planner/' + name + '.csv', 'w', encoding='UTF-8')
+
+        if not os.path.exists('./positions/planner'):
+            os.mkdir('./positions/planner')
+        out_file = open('./positions/planner/' + name + '.csv', 'w', encoding='UTF-8')
         # out_file.write('day,time,x,y,theta,v\n')  #
         for i in range(len(x_list)):
             out_file.write(day_list[i] + ',')

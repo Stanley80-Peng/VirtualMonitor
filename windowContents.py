@@ -133,7 +133,7 @@ class Ui_Form(object):
         self.button_pause.setText(_translate("Form", "Pause / Resume"))
         self.label_speed.setText(_translate("Form", "Speed"))
         self.label_multiple.setText(_translate("Form", "1x         4x         16x        64x            512x"))
-        self.button_forw15.setText(_translate("Form", "15sec>>"))
+        self.button_forw15.setText(_translate("Form", "30sec>>"))
         self.button_forw10.setText(_translate("Form", "10min>>"))
         self.button_forw1h.setText(_translate("Form", "1hr>>"))
         self.button_back15.setText(_translate("Form", "<<15sec"))
