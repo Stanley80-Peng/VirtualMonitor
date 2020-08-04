@@ -48,7 +48,7 @@ class Ui_ToolWindow(Ui_Form):
         self.button_back30.clicked.connect(lambda: self.jump(str(-1800)))
         self.button_skip.clicked.connect(lambda: self.putMes('skip'))
         self.button_clear.clicked.connect(lambda: self.putMes('clear'))
-        self.button_set.clicked.connect(self.set)
+        self.button_set.clicked.connect(self.set_auto_clear)
         self.button_stamp.clicked.connect(lambda: self.putMes('stamp'))
 
     def getDefaults(self):
@@ -160,7 +160,7 @@ class Ui_ToolWindow(Ui_Form):
         self.mes.put('jump')
         self.mes.put(sec)
 
-    def set(self):
+    def set_auto_clear(self):
         clearTime = self.lineEdit_auto.text()
         print('set auto clear time: %ssec' % clearTime)
         self.mes.put('auto')

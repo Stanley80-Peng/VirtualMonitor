@@ -1,5 +1,6 @@
 # Files and data sets used to test
 .csv
+.DS_Store
 .idea
 venv/
 planner/
