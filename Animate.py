@@ -84,7 +84,10 @@ class Animate(object):
             self.x_list.append(int(info[2]))
             self.y_list.append(int(info[3]))
             self.v_list.append(float(info[5]))
-            self.theta_list.append(float(info[4]))
+            theta_now = float(info[4])
+            if theta_now < 0:
+                theta_now += 2 * pi
+            self.theta_list.append(theta_now)
             self.dataCount += 1
 
     def slam_get(self, mapid):
