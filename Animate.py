@@ -118,9 +118,7 @@ class Animate(object):
         self.y_excur = float(line.split(':')[4][0:9])
 
     def get_theta(self, info):
-        theta = float(0)
-        for i in range(5, 9):
-            theta += float(info[i])
+        theta = -atan2(float(info[8]), float(info[7]))
         return str(theta)
 
     def start(self, mes, mapid):
@@ -207,6 +205,7 @@ class Animate(object):
                      sin(self.theta_list[self.end_index]) * self.len_robot]]'''
 
         def get_border():
+            print(self.theta_list[self.end_index])
             points_x = [0, 0, 0, 0, 0]
             points_y = [0, 0, 0, 0, 0]
             phi = atan(self.wid_robot / self.len_robot)
@@ -242,7 +241,7 @@ class Animate(object):
 
             return line, txt, head, border,  # point, arrow,
 
-        fig, ax = plt.subplots(figsize=(self.imgWidth / 300, self.imgHeight / 300))
+        fig, ax = plt.subplots(figsize=(self.imgWidth / 200, self.imgHeight / 200))
         line, = ax.plot([], [], linewidth=1, color='#ff00e6')
         # point, = ax.plot([], [], 'o', markersize=10)
         # arrow, = ax.plot([], [], linewidth=1, color='black')
