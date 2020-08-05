@@ -260,15 +260,15 @@ class Animate(object):
             else:
                 return line, txt, head, border,
 
-        fig, ax = plt.subplots(figsize=(self.imgWidth / 200, self.imgHeight / 200))
+        fig, ax = plt.subplots(figsize=(self.imgWidth / 400, self.imgHeight / 400))
         line, = ax.plot([], [], linewidth=1, color='#a771fd')
         # point, = ax.plot([], [], 'o', markersize=10)
         # arrow, = ax.plot([], [], linewidth=1, color='black')
         head, = ax.plot([], [], linewidth=1.6, color='#ff00e6')  #ff00e6
         border, = ax.plot([], [], linewidth=1.6, color='#00b1fe')  #00b1fe
-        txt = ax.text(30, 125, '  ', fontsize=16)
+        txt = ax.text(30, 125, '  ', fontsize=8)
         if self.mode == 'planner':
-            txt2 = ax.text(30, 220, '  ', fontsize=16)
+            txt2 = ax.text(30, 220, '  ', fontsize=8)
         adjustFrame(1)
         ani = FuncAnimation(fig, update, frames=[i for i in range(0, 10000)],
                             interval=1, blit=True, repeat=True)
