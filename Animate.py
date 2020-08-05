@@ -198,20 +198,20 @@ class Animate(object):
             if self.end_index >= self.dataCount:
                 self.end_index = self.dataCount - 1
 
-        def get_arrow():
+        '''def get_arrow():
             return [[self.x_list[self.end_index],
                      self.x_list[self.end_index] +
-                     cos(self.theta_list[self.end_index]) * self.len_robot / 2],
+                     cos(self.theta_list[self.end_index]) * self.len_robot],
                     [self.y_list[self.end_index],
                      self.y_list[self.end_index] +
-                     sin(self.theta_list[self.end_index]) * self.len_robot / 2]]
+                     sin(self.theta_list[self.end_index]) * self.len_robot]]'''
 
         def get_border():
             points_x = [0, 0, 0, 0, 0]
             points_y = [0, 0, 0, 0, 0]
             phi = atan(self.wid_robot / self.len_robot)
             theta_A = self.theta_list[self.end_index] - phi
-            half_diag = sqrt(pow(self.len_robot, 2) + pow(self.wid_robot, 2)) / 2
+            half_diag = sqrt(pow(self.len_robot, 2) + pow(self.wid_robot, 2))
             points_x[0] = points_x[4] = half_diag * cos(theta_A) + self.x_list[self.end_index]
             points_y[0] = points_y[4] = half_diag * sin(theta_A) + self.y_list[self.end_index]
             theta_B = self.theta_list[self.end_index] + pi + phi
@@ -221,7 +221,7 @@ class Animate(object):
             points_y[2] = 2 * self.y_list[self.end_index] - points_y[0]
             points_x[3] = 2 * self.x_list[self.end_index] - points_x[1]
             points_y[3] = 2 * self.y_list[self.end_index] - points_y[1]
-            return points_x, points_y
+            return points_x[0:4], points_y[0:4], points_x[3:5], points_y[3:5]
 
         def update(no_use):
             check_mes()
@@ -229,23 +229,25 @@ class Animate(object):
             xsco, ysco = getScope()
             line.set_data(xsco, ysco)
 
-            arrow_x, arrow_y = get_arrow()
-            arrow.set_data(arrow_x, arrow_y)
+            '''arrow_x, arrow_y = get_arrow()
+            arrow.set_data(arrow_x, arrow_y)'''
 
-            border_x, border_y = get_border()
+            border_x, border_y, head_x, head_y = get_border()
+            head.set_data(head_x, head_y)
             border.set_data(border_x, border_y)
 
             # point.set_data(self.x_list[self.end_index], self.y_list[self.end_index])
             txt.set_text(self.time_list[self.end_index])
             time.sleep(self.sleepTime / float(1000))
 
-            return line, txt, arrow, border,  # point,
+            return line, txt, head, border,  # point, arrow,
 
-        fig, ax = plt.subplots(figsize=(self.imgWidth / 400, self.imgHeight / 400))
-        line, = ax.plot([], [], linewidth=2)
+        fig, ax = plt.subplots(figsize=(self.imgWidth / 300, self.imgHeight / 300))
+        line, = ax.plot([], [], linewidth=1, color='#ff00e6')
         # point, = ax.plot([], [], 'o', markersize=10)
-        arrow, = ax.plot([], [], linewidth=1, color='black')
-        border, = ax.plot([], [], linewidth=1, color='black')
+        # arrow, = ax.plot([], [], linewidth=1, color='black')
+        head, = ax.plot([], [], linewidth=1.6, color='#00b1fe')
+        border, = ax.plot([], [], linewidth=1.6, color='#9761fd')
         txt = ax.text(10, 200, '  ', fontsize=10)
         adjustFrame(1)
         ani = FuncAnimation(fig, update, frames=[i for i in range(0, 10000)],
