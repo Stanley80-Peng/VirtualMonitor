@@ -1,7 +1,7 @@
-default file path: '../ShadowData'
+default file path: '../planner'
 map path: '../maps' (cannot be edited in running)
 default map to show: '11002'
-default show mode: 'shadow' (planner/shadow)
+default show mode: 'planner' (planner/shadow)
 default auto clear time: '60' seconds
 planner mode log-writing: '1' log(s) per second
 planner mode speed 1x means playing: '1' second(s) per second

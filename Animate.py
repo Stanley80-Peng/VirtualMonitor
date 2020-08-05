@@ -13,6 +13,8 @@ class Animate(object):
         self.y_list = []
         self.v_list = []
         self.theta_list = []
+        self.file_list = []
+        self.line_list = []
         self.imgHeight = 0
         self.imgWidth = 0
         self.mapPath = ''
@@ -86,6 +88,8 @@ class Animate(object):
             if theta_now < 0:
                 theta_now += 2 * pi
             self.theta_list.append(theta_now)
+            self.file_list.append(info[6])
+            self.line_list.append(info[7])
             self.dataCount += 1
 
     def slam_get(self, mapid):
@@ -240,12 +244,21 @@ class Animate(object):
             border_x, border_y, head_x, head_y = get_border()
             head.set_data(head_x, head_y)
             border.set_data(border_x, border_y)
-
             # point.set_data(self.x_list[self.end_index], self.y_list[self.end_index])
-            txt.set_text(self.time_list[self.end_index])
-            time.sleep(self.sleepTime / float(1000))
+            text = 'time: %s   (x, y) = (%4d, %4d)   theta = %.04lf' %(str(self.time_list[self.end_index]),
+                                                                   self.x_list[self.end_index],
+                                                                   self.y_list[self.end_index],
+                                                                   self.theta_list[self.end_index])
+            txt.set_text(text)
+            if self.mode == 'planner':
+                text2 = 'in file: \"%30s\"  line: %7s' % (self.file_list[self.end_index], self.line_list[self.end_index])
+                txt2.set_text(text2)
 
-            return line, txt, head, border,  # point, arrow,
+            time.sleep(self.sleepTime / float(1000))
+            if self.mode == 'planner':
+                return line, txt, head, border, txt2,  # point, arrow,
+            else:
+                return line, txt, head, border,
 
         fig, ax = plt.subplots(figsize=(self.imgWidth / 200, self.imgHeight / 200))
         line, = ax.plot([], [], linewidth=1, color='#a771fd')
@@ -253,7 +266,9 @@ class Animate(object):
         # arrow, = ax.plot([], [], linewidth=1, color='black')
         head, = ax.plot([], [], linewidth=1.6, color='#ff00e6')  #ff00e6
         border, = ax.plot([], [], linewidth=1.6, color='#00b1fe')  #00b1fe
-        txt = ax.text(10, 200, '  ', fontsize=10)
+        txt = ax.text(30, 125, '  ', fontsize=16)
+        if self.mode == 'planner':
+            txt2 = ax.text(30, 220, '  ', fontsize=16)
         adjustFrame(1)
         ani = FuncAnimation(fig, update, frames=[i for i in range(0, 10000)],
                             interval=1, blit=True, repeat=True)

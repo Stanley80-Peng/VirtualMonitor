@@ -28,7 +28,7 @@ class Data_planner(object):
         p.join()
     
 def proc_file(path, filename):
-    def appe(data_line):
+    def appe(data_line, line_num):
         pattern = re.compile(r'[(][^)]*[)]')
         find_list = pattern.findall(data_line)
         x_y_theta = find_list[1].split(',')
@@ -41,6 +41,7 @@ def proc_file(path, filename):
         y_list.append(x_y_theta[1][1:])
         theta_list.append(x_y_theta[2][1:-1])
         v_list.append(v_omega[0][1:])
+        line_list.append(line_num)
         
     def write_csv(name):  # 把有用的数据写到positions文件夹内的csv文件中
         if not os.path.exists('./positions'):
@@ -55,7 +56,9 @@ def proc_file(path, filename):
             out_file.write(x_list[i] + ',')
             out_file.write(y_list[i] + ',')
             out_file.write(theta_list[i] + ',')
-            out_file.write(v_list[i] + '\n')
+            out_file.write(v_list[i] + ',')
+            out_file.write(str(name).split('root.')[1] + ',')
+            out_file.write(str(line_list[i]) + '\n')
         out_file.close()
 
     day_list = []
@@ -64,15 +67,17 @@ def proc_file(path, filename):
     y_list = []
     theta_list = []
     v_list = []
-
+    line_list = []
+    linenum = 0
     f = open(path + '/' + filename)
     # print('open file ' + filename)  #
     while True:
         line = f.readline()
+        linenum += 1
         if not line:
             break
         if re.search('(x, y, theta)', line):
-            appe(line)
+            appe(line, linenum)
     f.close()
     write_csv(filename)
 
