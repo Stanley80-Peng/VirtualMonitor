@@ -40,8 +40,8 @@ class Animate(object):
         self.mapPath = lines[1].split('\'')[1]
         self.auto_del = int(lines[4].split('\'')[1])
         self.max_fps = int(lines[9].split('\'')[1])
-        if self.max_fps > 48:
-            self.max_fps = 48
+        if self.max_fps > 36:
+            self.max_fps = 36
         if self.mode == 'planner':
             self.logSpeed = int(lines[5].split('\'')[1])
             self.baseSpeed = float(lines[6].split('\'')[1])
@@ -64,8 +64,6 @@ class Animate(object):
     def plan_get(self):
         DIR = os.listdir('./positions/planner')
         DIR.sort()
-        '''for file in DIR:
-            print(file)'''
         for file in DIR:
             with open('./positions/planner/' + file, encoding='UTF-8') as f:
                 self.proc_csv_plan(f)
@@ -91,8 +89,14 @@ class Animate(object):
             self.dataCount += 1
 
     def slam_get(self, mapid):
+        DIR = os.listdir('./positions/shadow')
+        DIR.sort()
+        for file in DIR:
+            with open('./positions/shadow/' + file, encoding='UTF-8') as f:
+                self.proc_csv_slam(f, mapid)
+
+    def proc_csv_slam(self, f, mapid):
         self.get_excur(mapid)
-        f = open('./positions/shadow/slam.csv', 'r')
         while True:
             line = f.readline()
             if not line:
@@ -118,7 +122,9 @@ class Animate(object):
         self.y_excur = float(line.split(':')[4][0:9])
 
     def get_theta(self, info):
-        theta = -atan2(float(info[8]), float(info[7]))
+        theta = -2 * atan2(float(info[7]), float(info[8]))
+        if theta < 0:
+            theta += 2 * pi
         return str(theta)
 
     def start(self, mes, mapid):
@@ -139,7 +145,7 @@ class Animate(object):
             sec_incre = float(speed) * float(self.baseSpeed) * float(self.logSpeed)
             self.sing_incre = ceil(sec_incre / float(self.max_fps))
             actual_rate = sec_incre / float(self.sing_incre)
-            self.sleepTime = float(1000) / actual_rate - 20
+            self.sleepTime = float(1000) / actual_rate - 27
 
         def ajustFrame(speed):
             self.sing_incre = ceil(float(speed) * float(self.baseSpeed)
@@ -205,12 +211,12 @@ class Animate(object):
                      sin(self.theta_list[self.end_index]) * self.len_robot]]'''
 
         def get_border():
-            print(self.theta_list[self.end_index])
+            #print(self.theta_list[self.end_index])
             points_x = [0, 0, 0, 0, 0]
             points_y = [0, 0, 0, 0, 0]
             phi = atan(self.wid_robot / self.len_robot)
             theta_A = self.theta_list[self.end_index] - phi
-            half_diag = sqrt(pow(self.len_robot, 2) + pow(self.wid_robot, 2))
+            half_diag = sqrt(pow(self.len_robot, 2) + pow(self.wid_robot, 2)) / 2
             points_x[0] = points_x[4] = half_diag * cos(theta_A) + self.x_list[self.end_index]
             points_y[0] = points_y[4] = half_diag * sin(theta_A) + self.y_list[self.end_index]
             theta_B = self.theta_list[self.end_index] + pi + phi
@@ -242,17 +248,17 @@ class Animate(object):
             return line, txt, head, border,  # point, arrow,
 
         fig, ax = plt.subplots(figsize=(self.imgWidth / 200, self.imgHeight / 200))
-        line, = ax.plot([], [], linewidth=1, color='#ff00e6')
+        line, = ax.plot([], [], linewidth=1, color='#a771fd')
         # point, = ax.plot([], [], 'o', markersize=10)
         # arrow, = ax.plot([], [], linewidth=1, color='black')
-        head, = ax.plot([], [], linewidth=1.6, color='#00b1fe')
-        border, = ax.plot([], [], linewidth=1.6, color='#9761fd')
+        head, = ax.plot([], [], linewidth=1.6, color='#ff00e6')  #ff00e6
+        border, = ax.plot([], [], linewidth=1.6, color='#00b1fe')  #00b1fe
         txt = ax.text(10, 200, '  ', fontsize=10)
         adjustFrame(1)
         ani = FuncAnimation(fig, update, frames=[i for i in range(0, 10000)],
                             interval=1, blit=True, repeat=True)
         im = plt.imread(self.mapPath + '/' + str(mapid) + '.png')
         plt.imshow(im)
-        plt.axis('off')
+        plt.axis('on')
         plt.show()
         mes.put('over')

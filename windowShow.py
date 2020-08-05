@@ -33,6 +33,8 @@ class Ui_ToolWindow(Ui_Form):
         self.mapid = None
         self.isRunning = False
         self.filepath = None
+        self.canStartPlanner = False
+        self.canStartShadow = False
 
     def connectButtons(self):
         self.button_browse.clicked.connect(self.browse)
@@ -54,7 +56,7 @@ class Ui_ToolWindow(Ui_Form):
     def getDefaults(self):
         f = open('config.txt', 'r', encoding='UTF-8')
         if not f:
-            print('Fail to open\'config.txt\'')
+            # print('Fail to open\'config.txt\'')
             return
         lines = f.readlines()
         self.lineEdit_filepath.setText(str(lines[0].split('\'')[1]))
@@ -70,16 +72,16 @@ class Ui_ToolWindow(Ui_Form):
         self.lineEdit_auto.setText(str(lines[4].split('\'')[1]))
 
     def browse(self):  # 以工作者目录为起始目录浏览planner文件夹的位置
-        print('browse')  # debug
+        # print('browse')  # debug
         start_path = os.path.expanduser('~')
         dir_choose = QFileDialog.getExistingDirectory(None, "选取文件夹", start_path)
         if dir_choose == "":
             return
-        print('filepath = ' + dir_choose)  # debug
+        # print('filepath = ' + dir_choose)  # debug
         self.lineEdit_filepath.setText(dir_choose)
 
     def init(self):
-        print('init')
+        # print('init')
         self.mapid = self.lineEdit_mapid.text()
         self.filepath = self.lineEdit_filepath.text()
 
@@ -105,7 +107,7 @@ class Ui_ToolWindow(Ui_Form):
             QMessageBox.information(None, '', 'Please select replay mode!')
 
     def start(self):
-        print('start')
+        # print('start')
 
         if not self.mes.empty():
             self.isRunning = False
@@ -152,23 +154,23 @@ class Ui_ToolWindow(Ui_Form):
     def speedChange(self):
         expo = self.slider_speed.value()
         speed = int(pow(2, expo - 1))
-        print('change speed to %dx' % speed)
+        # print('change speed to %dx' % speed)
         self.mes.put('speed')
         self.mes.put(str(speed))
 
     def jump(self, sec):
-        print('jump ' + sec + ' seconds')
+        # print('jump ' + sec + ' seconds')
         self.mes.put('jump')
         self.mes.put(sec)
 
     def set_auto_clear(self):
         clearTime = self.lineEdit_auto.text()
-        print('set auto clear time: %ssec' % clearTime)
+        # print('set auto clear time: %ssec' % clearTime)
         self.mes.put('auto')
         self.mes.put(clearTime)
 
     def putMes(self, message):
-        print('Put message: ' + message)
+        # print('Put message: ' + message)
         self.mes.put(message)
 
 

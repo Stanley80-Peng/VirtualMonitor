@@ -1,4 +1,4 @@
-default file path: '../ShadowData/2020-07-31-17-04-52'
+default file path: '../ShadowData'
 map path: '../maps' (cannot be edited in running)
 default map to show: '11002'
 default show mode: 'shadow' (planner/shadow)
@@ -6,8 +6,8 @@ default auto clear time: '60' seconds
 planner mode log-writing: '1' log(s) per second
 planner mode speed 1x means playing: '1' second(s) per second
 shadow mode log-writing: '162' log(s) per second
-shadow mode speed 1x means playing: '0.1' second(s) per second
-max image refresh rate: '2' frames per second (depend on the graphic card on your computer)
+shadow mode speed 1x means playing: '0.125' second(s) per second
+max image refresh rate: '30' frames per second (depend on the graphic card on your computer)
 robot size in centimeter: '90' * '50'
 
 
