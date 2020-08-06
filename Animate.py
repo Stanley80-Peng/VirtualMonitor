@@ -15,6 +15,9 @@ class Animate(object):
         self.theta_list = []
         self.file_list = []
         self.line_list = []
+        self.load_list = []
+        self.load_x = []
+        self.load_y = []
         self.imgHeight = 0
         self.imgWidth = 0
         self.mapPath = ''
@@ -24,6 +27,9 @@ class Animate(object):
         self.dataCount = int(0)
         self.auto_del = int(0)
         self.pause_flag = False
+        self.hide_path = False
+        self.hide_load = False
+        self.load_here = False
         self.sing_incre = int(0)
         self.logSpeed = int(0)
         self.baseSpeed = float(0)
@@ -90,6 +96,7 @@ class Animate(object):
             self.theta_list.append(theta_now)
             self.file_list.append(info[6])
             self.line_list.append(info[7])
+            self.load_list.append(info[8])
             self.dataCount += 1
 
     def slam_get(self, mapid):
@@ -194,9 +201,16 @@ class Animate(object):
                     speed()
                 elif message == 'skip':
                     skip()
-                elif message == 'clear':
+                elif message == 'clear_path':
                     self.beg_index = self.end_index
                     self.auto_del = 0
+                elif message == 'hide_path':
+                    self.hide_path = True if self.hide_path is False else False
+                elif message == 'clear_load':
+                    self.load_x.clear()
+                    self.load_y.clear()
+                elif message == 'hide_load':
+                    self.hide_load = True if self.hide_load is False else False
                 elif message == 'auto':
                     auto()
                 elif message == 'stamp':
@@ -205,6 +219,9 @@ class Animate(object):
                 self.end_index += self.sing_incre
             if self.end_index >= self.dataCount:
                 self.end_index = self.dataCount - 1
+            if self.load_list[self.end_index] == '1':
+                self.load_x.append(self.x_list[self.end_index])
+                self.load_y.append(self.y_list[self.end_index])
 
         '''def get_arrow():
             return [[self.x_list[self.end_index],
@@ -236,7 +253,15 @@ class Animate(object):
             check_mes()
 
             xsco, ysco = getScope()
-            line.set_data(xsco, ysco)
+            if self.hide_path:
+                line.set_data([], [])
+            else:
+                line.set_data(xsco, ysco)
+
+            if self.hide_load:
+                load.set_data([], [])
+            else:
+                load.set_data(self.load_x, self.load_y)
 
             '''arrow_x, arrow_y = get_arrow()
             arrow.set_data(arrow_x, arrow_y)'''
@@ -256,7 +281,7 @@ class Animate(object):
 
             time.sleep(self.sleepTime / float(1000))
             if self.mode == 'planner':
-                return line, txt, head, border, txt2,  # point, arrow,
+                return line, txt, head, border, txt2, load,  # point, arrow,
             else:
                 return line, txt, head, border,
 
@@ -266,6 +291,7 @@ class Animate(object):
         # arrow, = ax.plot([], [], linewidth=1, color='black')
         head, = ax.plot([], [], linewidth=1.6, color='#ff00e6')  #ff00e6
         border, = ax.plot([], [], linewidth=1.6, color='#00b1fe')  #00b1fe
+        load, = ax.plot([], [], 'o', markersize=4, color='orange')
         txt = ax.text(30, 125, '  ', fontsize=8)
         if self.mode == 'planner':
             txt2 = ax.text(30, 220, '  ', fontsize=8)

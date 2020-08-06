@@ -42,14 +42,18 @@ class Ui_ToolWindow(Ui_Form):
         self.button_start.clicked.connect(self.start)
         self.button_pause.clicked.connect(lambda: self.putMes('pause'))
         self.slider_speed.valueChanged.connect(self.speedChange)
-        self.button_forw15.clicked.connect(lambda: self.jump(str(15)))
-        self.button_forw10.clicked.connect(lambda: self.jump(str(600)))
-        self.button_forw1h.clicked.connect(lambda: self.jump(str(3600)))
-        self.button_back15.clicked.connect(lambda: self.jump(str(-15)))
-        self.button_back3.clicked.connect(lambda: self.jump(str(-180)))
-        self.button_back30.clicked.connect(lambda: self.jump(str(-1800)))
+        self.button_forw30.clicked.connect(lambda: self.jump(30))
+        self.button_forw15.clicked.connect(lambda: self.jump(900))
+        self.button_forw1h.clicked.connect(lambda: self.jump(3600))
+        self.button_back20.clicked.connect(lambda: self.jump(-20))
+        self.button_back6.clicked.connect(lambda: self.jump(-360))
+        self.button_back30.clicked.connect(lambda: self.jump(-1800))
         self.button_skip.clicked.connect(lambda: self.putMes('skip'))
-        self.button_clear.clicked.connect(lambda: self.putMes('clear'))
+        self.button_clear_path.clicked.connect(lambda: self.putMes('clear_path'))
+        self.button_hide_path.clicked.connect(lambda: self.putMes('hide_path'))
+        self.button_clear_load.clicked.connect(lambda: self.putMes('clear_load'))
+        self.button_hide_load.clicked.connect(lambda: self.putMes('hide_load'))
+        self.button_jump.clicked.connect(self.customize_jump)
         self.button_set.clicked.connect(self.set_auto_clear)
         self.button_stamp.clicked.connect(lambda: self.putMes('stamp'))
 
@@ -119,6 +123,8 @@ class Ui_ToolWindow(Ui_Form):
             return
 
         self.slider_speed.setValue(3)
+        self.mes.put('speed')
+        self.mes.put('4')
         self.mapid = self.lineEdit_mapid.text()
         if not os.path.exists(self.mapPath + '/' + str(self.mapid) + '.png'):
             QMessageBox.information(None, '', 'No available map in the \"maps\" folder!\n')
@@ -166,6 +172,10 @@ class Ui_ToolWindow(Ui_Form):
         # print('jump ' + sec + ' seconds')
         self.mes.put('jump')
         self.mes.put(sec)
+
+    def customize_jump(self):
+        jumptime = self.lineEdit_jump.text()
+        self.jump(jumptime)
 
     def set_auto_clear(self):
         clearTime = self.lineEdit_auto.text()

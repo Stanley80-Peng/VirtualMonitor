@@ -42,6 +42,11 @@ def proc_file(path, filename):
         theta_list.append(x_y_theta[2][1:-1])
         v_list.append(v_omega[0][1:])
         line_list.append(line_num)
+        load_list.append('0')
+
+    def appe_load():
+        if len(x_list):
+            load_list[len(x_list)-1] = '1'
         
     def write_csv(name):  # 把有用的数据写到positions文件夹内的csv文件中
         if not os.path.exists('./positions'):
@@ -58,7 +63,8 @@ def proc_file(path, filename):
             out_file.write(theta_list[i] + ',')
             out_file.write(v_list[i] + ',')
             out_file.write(str(name).split('root.')[1] + ',')
-            out_file.write(str(line_list[i]) + '\n')
+            out_file.write(str(line_list[i]) + ',')
+            out_file.write(str(load_list[i]) + '\n')
         out_file.close()
 
     day_list = []
@@ -68,6 +74,7 @@ def proc_file(path, filename):
     theta_list = []
     v_list = []
     line_list = []
+    load_list = []
     linenum = 0
     f = open(path + '/' + filename)
     # print('open file ' + filename)  #
@@ -78,6 +85,8 @@ def proc_file(path, filename):
             break
         if re.search('(x, y, theta)', line):
             appe(line, linenum)
+        elif re.search('loadhere', line):
+            appe_load()
     f.close()
     write_csv(filename)
 
