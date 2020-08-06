@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QFileDialog, QMessageBox
 from windowContents import *
-from multiprocessing import Queue
+from multiprocessing import Process, Queue
 from Animate import *
 from Data_shadow import *
 from Data_planner import *
@@ -138,7 +138,9 @@ class Ui_ToolWindow(Ui_Form):
                 return
 
             self.isRunning = True
-            show.start(mes=self.mes, mapid=self.mapid)
+            plan = Process(target=show.start, args=(self.mes, self.mapid,))
+            plan.start()
+            # show.start(mes=self.mes, mapid=self.mapid)
 
         elif self.radio_shadow.isChecked():
 
@@ -149,7 +151,9 @@ class Ui_ToolWindow(Ui_Form):
             show = Animate('shadow', -1)
             show.getData(self.mapid)
             self.isRunning = True
-            show.start(mes=self.mes, mapid=self.mapid)
+            shad = Process(target=show.start, args=(self.mes, self.mapid,))
+            shad.start()
+            # show.start(mes=self.mes, mapid=self.mapid)
 
     def speedChange(self):
         expo = self.slider_speed.value()
