@@ -219,9 +219,10 @@ class Animate(object):
                 self.end_index += self.sing_incre
             if self.end_index >= self.dataCount:
                 self.end_index = self.dataCount - 1
-            if self.load_list[self.end_index] == '1':
-                self.load_x.append(self.x_list[self.end_index])
-                self.load_y.append(self.y_list[self.end_index])
+            if self.mode == 'planner':
+                if self.load_list[self.end_index] == '1':
+                    self.load_x.append(self.x_list[self.end_index])
+                    self.load_y.append(self.y_list[self.end_index])
 
         '''def get_arrow():
             return [[self.x_list[self.end_index],
@@ -257,11 +258,11 @@ class Animate(object):
                 line.set_data([], [])
             else:
                 line.set_data(xsco, ysco)
-
-            if self.hide_load:
-                load.set_data([], [])
-            else:
-                load.set_data(self.load_x, self.load_y)
+            if self.mode == 'planner':
+                if self.hide_load:
+                    load.set_data([], [])
+                else:
+                    load.set_data(self.load_x, self.load_y)
 
             '''arrow_x, arrow_y = get_arrow()
             arrow.set_data(arrow_x, arrow_y)'''
@@ -285,13 +286,14 @@ class Animate(object):
             else:
                 return line, txt, head, border,
 
-        fig, ax = plt.subplots(figsize=(self.imgWidth / 400, self.imgHeight / 400))
+        fig, ax = plt.subplots(figsize=(self.imgWidth / 300, self.imgHeight / 300))
         line, = ax.plot([], [], linewidth=1, color='#a771fd')
         # point, = ax.plot([], [], 'o', markersize=10)
         # arrow, = ax.plot([], [], linewidth=1, color='black')
         head, = ax.plot([], [], linewidth=1.6, color='#ff00e6')  #ff00e6
         border, = ax.plot([], [], linewidth=1.6, color='#00b1fe')  #00b1fe
-        load, = ax.plot([], [], 'o', markersize=4, color='orange')
+        if self.mode == 'planner':
+            load, = ax.plot([], [], 'o', markersize=4, color='orange')
         txt = ax.text(30, 125, '  ', fontsize=8)
         if self.mode == 'planner':
             txt2 = ax.text(30, 220, '  ', fontsize=8)

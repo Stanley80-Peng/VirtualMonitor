@@ -17,12 +17,13 @@ class Data_slam(object):
 def proc_dir(path):
     p = Pool(mp.cpu_count())
     DIR = os.listdir(path)
-    for dir in DIR:
-        files = os.listdir(path + '/' + str(dir))
-        for file in files:
-            with open(path + '/' + str(dir) + '/' + file, 'rb') as f:
-                if f.name.split('/')[-1].find('slam') + 1:
-                    proc_slam(f, str(dir),)
+    for dir_in in DIR:
+        if os.path.isdir(path + '/' + str(dir_in)):
+            files = os.listdir(path + '/' + str(dir_in))
+            for file in files:
+                with open(path + '/' + str(dir_in) + '/' + file, 'rb') as f:
+                    if f.name.split('/')[-1].find('slam') + 1:
+                        proc_slam(f, str(dir_in),)
                     # p.apply_async(proc_slam, args=(f, str(dir),))
     p.close()
     p.join()
