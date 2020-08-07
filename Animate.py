@@ -215,6 +215,15 @@ class Animate(object):
                     auto()
                 elif message == 'stamp':
                     print(self.time_list[self.end_index])
+                    if not os.path.exists('figures'):
+                        os.mkdir('figures')
+                    times = str(self.time_list[self.end_index]).split(':')
+                    if self.mode == 'planner':
+                        plt.savefig('figures' + '/' + 'planner-' + str(self.day_num) + '-' +
+                                times[0] + times[1] + times[2][0:3] + '.png', dpi=300)
+                    else:
+                        plt.savefig('figures' + '/' + 'shadow_slam-' +
+                                    times[0] + times[1] + times[2][0:3] + '.png', dpi=300)
             if not self.pause_flag:
                 self.end_index += self.sing_incre
             if self.end_index >= self.dataCount:
@@ -302,6 +311,6 @@ class Animate(object):
                             interval=1, blit=True, repeat=True)
         im = plt.imread(self.mapPath + '/' + str(mapid) + '.png')
         plt.imshow(im)
-        plt.axis('on')
+        plt.axis('off')
         plt.show()
         mes.put('over')
