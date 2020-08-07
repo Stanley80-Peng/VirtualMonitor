@@ -21,7 +21,7 @@ class Data_planner(object):
     def pool_files(self, path):
         p = Pool(mp.cpu_count())
         for i in range(self.fileCount):
-            if self.files[i].find('planner') + 1 and self.files[i].find('log') + 1 \
+            if self.files[i].find('planner') + 1 and self.files[i].find('root') + 1 \
                     and self.files[i].find('INFO') + 1:
                 p.apply_async(proc_file, args=(path, self.files[i],))
         p.close()
@@ -42,11 +42,15 @@ def proc_file(path, filename):
         theta_list.append(x_y_theta[2][1:-1])
         v_list.append(v_omega[0][1:])
         line_list.append(line_num)
-        load_list.append('0')
+        other_list.append('0')
 
     def appe_load():
         if len(x_list):
-            load_list[len(x_list)-1] = '1'
+            other_list[len(x_list)-1] = '1'
+
+    def appe_swapMap(mapid):
+        if len(x_list):
+            other_list[len(x_list)-1] = mapid
         
     def write_csv(name):  # 把有用的数据写到positions文件夹内的csv文件中
         if not os.path.exists('./positions'):
@@ -64,7 +68,7 @@ def proc_file(path, filename):
             out_file.write(v_list[i] + ',')
             out_file.write(str(name).split('root.')[1] + ',')
             out_file.write(str(line_list[i]) + ',')
-            out_file.write(str(load_list[i]) + '\n')
+            out_file.write(str(other_list[i]) + '\n')
         out_file.close()
 
     day_list = []
@@ -74,7 +78,7 @@ def proc_file(path, filename):
     theta_list = []
     v_list = []
     line_list = []
-    load_list = []
+    other_list = []
     linenum = 0
     f = open(path + '/' + filename)
     # print('open file ' + filename)  #
@@ -85,8 +89,10 @@ def proc_file(path, filename):
             break
         if re.search('(x, y, theta)', line):
             appe(line, linenum)
-        elif re.search('loadhere', line):
+        elif re.search('Forklift Unload Success', line):
             appe_load()
+        elif re.search('localization', line):
+            appe_swapMap(line.split('mapid: ')[1][0:6])
     f.close()
     write_csv(filename)
 

@@ -15,7 +15,7 @@ class Animate(object):
         self.theta_list = []
         self.file_list = []
         self.line_list = []
-        self.load_list = []
+        self.other_list = []
         self.load_x = []
         self.load_y = []
         self.imgHeight = 0
@@ -96,7 +96,7 @@ class Animate(object):
             self.theta_list.append(theta_now)
             self.file_list.append(info[6])
             self.line_list.append(info[7])
-            self.load_list.append(info[8])
+            self.other_list.append(info[8])
             self.dataCount += 1
 
     def slam_get(self, mapid):
@@ -229,9 +229,12 @@ class Animate(object):
             if self.end_index >= self.dataCount:
                 self.end_index = self.dataCount - 1
             if self.mode == 'planner':
-                if self.load_list[self.end_index] == '1':
+                if self.other_list[self.end_index] == '1':
                     self.load_x.append(self.x_list[self.end_index])
                     self.load_y.append(self.y_list[self.end_index])
+                elif not self.other_list[self.end_index] == '0':
+                    new_im = plt.imread(self.mapPath + '/' + self.other_list[self.end_index] + '.png')
+                    plt.imshow(new_im)
 
         '''def get_arrow():
             return [[self.x_list[self.end_index],
