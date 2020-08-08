@@ -153,17 +153,17 @@ class Animate(object):
             spd = mes.get()
             adjustFrame(spd)
 
-        def adjustFrame(speed):
-            sec_incre = float(speed) * float(self.baseSpeed) * float(self.logSpeed)
+        def adjustFrame(spd):
+            sec_incre = float(spd) * float(self.baseSpeed) * float(self.logSpeed)
             self.sing_incre = ceil(sec_incre / float(self.max_fps))
             actual_rate = sec_incre / float(self.sing_incre)
             self.sleepTime = float(1000) / actual_rate - 27
 
-        def ajustFrame(speed):
+        '''def ajustFrame(speed):
             self.sing_incre = ceil(float(speed) * float(self.baseSpeed)
                                    * float(self.logSpeed) / float(self.max_fps))
             self.sleepTime = float(1000) * float(self.sing_incre) / float(speed) \
-                             / float(self.baseSpeed) / float(self.logSpeed) - 1
+                             / float(self.baseSpeed) / float(self.logSpeed) - 1'''
 
         def skip():
             if self.mode == 'planner':
@@ -284,8 +284,7 @@ class Animate(object):
 
             border_x, border_y, head_x, head_y = get_border()
             head.set_data(head_x, head_y)
-            if not self.pause_flag:
-                border.set_data(border_x, border_y)
+            border.set_data(border_x, border_y)
             # point.set_data(self.x_list[self.end_index], self.y_list[self.end_index])
             text = 'time: %s   (x, y) = (%4d, %4d)   theta = %.04lf' %(str(self.time_list[self.end_index]),
                                                                    self.x_list[self.end_index],
@@ -293,15 +292,15 @@ class Animate(object):
                                                                    self.theta_list[self.end_index])
             txt.set_text(text)
             if self.mode == 'planner':
-                text2 = 'in file: \"%30s\"  line: %7s' % (self.file_list[self.end_index], self.line_list[self.end_index])
+                text2 = 'in file: \"%30s\"  line: %7s  mapid: %5s' % (self.file_list[self.end_index],
+                                                                     self.line_list[self.end_index],
+                                                                     self.mapid)
                 txt2.set_text(text2)
 
             time.sleep(self.sleepTime / float(1000))
             if self.mode == 'planner':
-                if not self.pause_flag:
-                    return line, txt, head, border, txt2, load, img_show  # point, arrow,
-                else:
-                    return line, txt, head, txt2, load, img_show
+                return line, txt, head, border, txt2, load, img_show  # point, arrow,
+
             else:
                 return line, txt, head, border,
 
@@ -318,7 +317,7 @@ class Animate(object):
             load, = ax.plot([], [], 'o', markersize=4, color='orange')
         txt = ax.text(30, 125, '  ', fontsize=8)
         if self.mode == 'planner':
-            txt2 = ax.text(30, 220, '  ', fontsize=8)
+            txt2 = ax.text(30, 220, '  ', fontsize=6)
         adjustFrame(1)
         ani = FuncAnimation(fig, update, frames=[i for i in range(0, 10000)],
                             interval=1, blit=True, repeat=True)
