@@ -8,6 +8,7 @@ from matplotlib.animation import FuncAnimation
 
 class Animate(object):
     def __init__(self, mode, date):
+        self.mapid = 0
         self.time_list = []
         self.x_list = []
         self.y_list = []
@@ -232,9 +233,10 @@ class Animate(object):
                 if self.other_list[self.end_index] == '1':
                     self.load_x.append(self.x_list[self.end_index])
                     self.load_y.append(self.y_list[self.end_index])
-                elif not self.other_list[self.end_index] == '0':
-                    new_im = plt.imread(self.mapPath + '/' + self.other_list[self.end_index] + '.png')
-                    plt.imshow(new_im)
+                elif len(self.other_list[self.end_index]) == 5:
+                    '''new_im = plt.imread(self.mapPath + '/' + self.other_list[self.end_index] + '.png')
+                    plt.imshow(new_im)'''
+                    self.mapid = self.other_list[self.end_index]
 
         '''def get_arrow():
             return [[self.x_list[self.end_index],
@@ -264,7 +266,8 @@ class Animate(object):
 
         def update(no_use):
             check_mes()
-
+            img = plt.imread(self.mapPath + '/' + str(self.mapid) + '.png')
+            img_show.set_data(img)
             xsco, ysco = getScope()
             if self.hide_path:
                 line.set_data([], [])
@@ -281,7 +284,8 @@ class Animate(object):
 
             border_x, border_y, head_x, head_y = get_border()
             head.set_data(head_x, head_y)
-            border.set_data(border_x, border_y)
+            if not self.pause_flag:
+                border.set_data(border_x, border_y)
             # point.set_data(self.x_list[self.end_index], self.y_list[self.end_index])
             text = 'time: %s   (x, y) = (%4d, %4d)   theta = %.04lf' %(str(self.time_list[self.end_index]),
                                                                    self.x_list[self.end_index],
@@ -294,11 +298,17 @@ class Animate(object):
 
             time.sleep(self.sleepTime / float(1000))
             if self.mode == 'planner':
-                return line, txt, head, border, txt2, load,  # point, arrow,
+                if not self.pause_flag:
+                    return line, txt, head, border, txt2, load, img_show  # point, arrow,
+                else:
+                    return line, txt, head, txt2, load, img_show
             else:
                 return line, txt, head, border,
 
         fig, ax = plt.subplots(figsize=(self.imgWidth / 300, self.imgHeight / 300))
+        self.mapid = mapid
+        ax.set_xlim(0, 1079)
+        ax.set_ylim(968, 0)
         line, = ax.plot([], [], linewidth=1, color='#a771fd')
         # point, = ax.plot([], [], 'o', markersize=10)
         # arrow, = ax.plot([], [], linewidth=1, color='black')
@@ -312,8 +322,8 @@ class Animate(object):
         adjustFrame(1)
         ani = FuncAnimation(fig, update, frames=[i for i in range(0, 10000)],
                             interval=1, blit=True, repeat=True)
-        im = plt.imread(self.mapPath + '/' + str(mapid) + '.png')
-        plt.imshow(im)
-        plt.axis('off')
+        im = plt.imread(self.mapPath + '/' + str(self.mapid) + '.png')
+        img_show = plt.imshow(im)
+        plt.axis('on')
         plt.show()
         mes.put('over')

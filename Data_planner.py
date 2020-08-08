@@ -92,7 +92,7 @@ def proc_file(path, filename):
         elif re.search('Forklift Unload Success', line):
             appe_load()
         elif re.search('localization', line):
-            appe_swapMap(line.split('mapid: ')[1][0:6])
+            appe_swapMap(line.split('mapid: ')[1][0:5])
     f.close()
     write_csv(filename)
 

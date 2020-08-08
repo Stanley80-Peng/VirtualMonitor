@@ -20,7 +20,7 @@ class Ui_ToolWindow(Ui_Form):
         self.debug()
 
     def debug(self):
-        self.lineEdit_date.setText('0731')
+        self.lineEdit_date.setText('0807')
 
     def checkMapFolder(self):
         if not os.path.exists(self.mapPath):
