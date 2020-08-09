@@ -8,39 +8,39 @@ from matplotlib.animation import FuncAnimation
 
 class Animate(object):
     def __init__(self, mode, date):
-        self.mapid = 0
-        self.time_list = []
-        self.x_list = []
-        self.y_list = []
-        self.v_list = []
-        self.theta_list = []
-        self.file_list = []
-        self.line_list = []
-        self.other_list = []
-        self.load_x = []
-        self.load_y = []
-        self.imgHeight = 0
-        self.imgWidth = 0
-        self.mapPath = ''
-        self.day_num = int(date)
-        self.beg_index = int(0)
-        self.end_index = 1
-        self.dataCount = int(0)
-        self.auto_del = int(0)
-        self.pause_flag = False
-        self.hide_path = False
-        self.hide_load = False
-        self.load_here = False
-        self.sing_incre = int(0)
-        self.logSpeed = int(0)
-        self.baseSpeed = float(0)
-        self.mode = str(mode)
-        self.x_excur = float(0)
-        self.y_excur = float(0)
-        self.max_fps = int(0)
-        self.sleepTime = float(0)
-        self.len_robot = int(0)
-        self.wid_robot = int(0)
+        self.mapid = 0#
+        self.time_list = []#
+        self.x_list = []#
+        self.y_list = []#
+        self.v_list = []#
+        self.theta_list = []#
+        self.file_list = []#
+        self.line_list = []#
+        self.map_list = []#
+        self.other_list = []#
+        self.load_x = []#
+        self.load_y = []#
+        self.imgHeight = 0#
+        self.imgWidth = 0#
+        self.mapPath = ''#
+        self.day_num = int(date)#
+        self.beg_index = int(0)#
+        self.end_index = 1#
+        self.dataCount = int(0)#
+        self.auto_del = int(0)#
+        self.pause_flag = False#
+        self.hide_path = False#
+        self.hide_load = False#
+        self.sing_incre = int(0)#
+        self.logSpeed = int(0)#
+        self.baseSpeed = float(0)#
+        self.mode = str(mode)#
+        self.x_excur = float(0)#
+        self.y_excur = float(0)#
+        self.max_fps = int(0)#
+        self.sleepTime = float(0)#
+        self.len_robot = int(0)#
+        self.wid_robot = int(0)#
         self.get_config()
 
     def get_config(self):
@@ -97,7 +97,8 @@ class Animate(object):
             self.theta_list.append(theta_now)
             self.file_list.append(info[6])
             self.line_list.append(info[7])
-            self.other_list.append(info[8])
+            self.map_list.append(info[8])
+            self.other_list.append(info[9])
             self.dataCount += 1
 
     def slam_get(self, mapid):
@@ -230,13 +231,10 @@ class Animate(object):
             if self.end_index >= self.dataCount:
                 self.end_index = self.dataCount - 1
             if self.mode == 'planner':
-                if self.other_list[self.end_index] == '1':
+                if self.other_list[self.end_index] == 'load':
                     self.load_x.append(self.x_list[self.end_index])
                     self.load_y.append(self.y_list[self.end_index])
-                elif len(self.other_list[self.end_index]) == 5:
-                    '''new_im = plt.imread(self.mapPath + '/' + self.other_list[self.end_index] + '.png')
-                    plt.imshow(new_im)'''
-                    self.mapid = self.other_list[self.end_index]
+
 
         '''def get_arrow():
             return [[self.x_list[self.end_index],
@@ -247,7 +245,7 @@ class Animate(object):
                      sin(self.theta_list[self.end_index]) * self.len_robot]]'''
 
         def get_border():
-            #print(self.theta_list[self.end_index])
+            # print(self.theta_list[self.end_index])
             points_x = [0, 0, 0, 0, 0]
             points_y = [0, 0, 0, 0, 0]
             phi = atan(self.wid_robot / self.len_robot)
@@ -306,8 +304,6 @@ class Animate(object):
 
         fig, ax = plt.subplots(figsize=(self.imgWidth / 300, self.imgHeight / 300))
         self.mapid = mapid
-        ax.set_xlim(0, 1079)
-        ax.set_ylim(968, 0)
         line, = ax.plot([], [], linewidth=1, color='#a771fd')
         # point, = ax.plot([], [], 'o', markersize=10)
         # arrow, = ax.plot([], [], linewidth=1, color='black')
