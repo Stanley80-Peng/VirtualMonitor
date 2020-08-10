@@ -6,8 +6,7 @@ from multiprocessing import Pool
 
 
 class Data_planner(object):
-    def __init__(self, path, mapid):
-        self.mapid = mapid
+    def __init__(self, path):
         # self.starttime = time.perf_counter()  #
         self.fileCount = -1
         self.files = self.sort_dir(path)
@@ -24,13 +23,13 @@ class Data_planner(object):
         for i in range(self.fileCount):
             if self.files[i].find('planner') + 1 and self.files[i].find('root') + 1 \
                     and self.files[i].find('INFO') + 1:
-                proc_file(path, self.files[i], self.mapid)
+                proc_file(path, self.files[i])
                 '''p.apply_async(proc_file, args=(path, self.files[i], self.mapid))
         p.close()
         p.join()'''
 
 
-def proc_file(path, filename, map_id):
+def proc_file(path, filename):
     def appe(data_line, line_num):
         pattern = re.compile(r'[(][^)]*[)]')
         find_list = pattern.findall(data_line)
@@ -50,7 +49,7 @@ def proc_file(path, filename, map_id):
 
     def appe_load():
         if len(x_list):
-            other_list[len(x_list) - 1] = 'load'``1234567
+            other_list[len(x_list) - 1] = 'load'
 
     '''def appe_swapMap(mapid):
         if len(x_list):
@@ -86,7 +85,6 @@ def proc_file(path, filename, map_id):
     map_list = []
     other_list = []
     linenum = 0
-    mapid = map_id
     f = open(path + '/' + filename)
     # print('open file ' + filename)  #
     while True:

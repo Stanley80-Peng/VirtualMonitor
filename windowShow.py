@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QFileDialog, QMessageBox
 from windowContents import *
 from multiprocessing import Process, Queue
-from Animate import *
+from Animate_re import *
 from Data_shadow import *
 from Data_planner import *
 import os
@@ -127,7 +127,7 @@ class Ui_ToolWindow(Ui_Form):
         self.mes.put('4')
         self.mapid = self.lineEdit_mapid.text()
         if not os.path.exists(self.mapPath + '/' + str(self.mapid) + '.png'):
-            QMessageBox.information(None, '', 'No available map in the \"maps\" folder!\n')
+            QMessageBox.information(None, 'Error', 'No available map in the \"maps\" folder!\n')
             return
 
         if self.radio_planner.isChecked():
@@ -139,7 +139,7 @@ class Ui_ToolWindow(Ui_Form):
             showDay = self.lineEdit_date.text()
             show = Animate('planner', showDay)
 
-            if show.getData(self.mapid) == 0:
+            if show.plan_get() == 0:
                 QMessageBox.information(None, 'ERROR', 'No data of entered date!')
                 return
 
@@ -155,7 +155,7 @@ class Ui_ToolWindow(Ui_Form):
                 return
 
             show = Animate('shadow', -1)
-            show.getData(self.mapid)
+            show.shad_get(self.mapid)
             self.isRunning = True
             shad = Process(target=show.start, args=(self.mes, self.mapid,))
             shad.start()

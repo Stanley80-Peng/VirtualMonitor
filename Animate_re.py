@@ -5,12 +5,11 @@ import numpy as np
 from math import *
 from PIL import Image
 from matplotlib.animation import FuncAnimation
-from multiprocessing import Pool
 
 
 class Animate(object):
     def __init__(self, mode, date):
-        self.map_id = -1
+        self.map_id = ''
         self.map_path = ''
         self.day_num = int(date)
         self.data_count = 0
@@ -52,8 +51,8 @@ class Animate(object):
         self.hide_path = False
         self.hide_loads = False  # (only in planner mode)
 
-        self.fig_width = 0
-        self.fig_height = 0
+        self.fig_width = 10
+        self.fig_height = 10
 
         self.get_config()
 
@@ -83,7 +82,7 @@ class Animate(object):
         DIR = os.listdir('./positions/planner')
         DIR.sort()
         for file in DIR:
-            with open('./positions/planner' + file, encoding='UTF-8') as f:
+            with open('./positions/planner/' + file, encoding='UTF-8') as f:
                 self.proc_csv_plan(f)
         return self.data_count
 
@@ -140,49 +139,81 @@ class Animate(object):
         self.y_excursion = float(line.split(':')[4][0:9])
 
     def start(self, mes, map_id):
-        def update(no_use):
-            check_mes()
 
-            path.set_data(get_path())
-            head.set_data(get_edges()[2:4])
-            border.set_data(get_edges()[0:2])
-            text_detail.set_text(get_detail())
+        def jump():
+            sec = int(mes.get())
+            self.end_index += sec * self.log_speed
+            if self.end_index >= self.data_count:
+                self.end_index = self.data_count - 1
+            if self.end_index <= 1:
+                self.end_index = 1
+            if sec < 0:
+                self.beg_index = self.end_index
 
+        def adjustFrame(spd):
+            sec_aug = float(spd) * float(self.base_speed) * float(self.log_speed)
+            self.sing_aug = ceil(sec_aug / float(self.max_fps))
+            actual_rate = sec_aug / float(self.sing_aug)
+            self.sleep_time = float(1000) / actual_rate - 27
+
+        def speed():
+            new_speed = mes.get()
+            adjustFrame(new_speed)
+
+        def auto():
+            sec = int(mes.get())
+            self.auto_del = int(sec * self.log_speed)
+
+        def pause():
+            self.pause_flag = True if self.pause_flag is False else False
+
+        def clear_path():
+            self.beg_index = self.end_index
+            self.auto_del = 0
+
+        def hide_path():
+            self.hide_path = True if self.hide_path is False else False
+
+        def clear_loads():
+            self.loads_x.clear()
+            self.loads_y.clear()
+
+        def hide_loads():
+            self.hide_load = True if self.hide_load is False else False
+
+        def stamp():
+            print(self.time_list[self.end_index])
+            if not os.path.exists('figures'):
+                os.mkdir('figures')
+            times = str(self.time_list[self.end_index]).split(':')
             if self.mode == 'planner':
-                text_file_line.set_text(get_file_line())
-                loads.set_data(get_loads())
-
-                if self.map_list[self.end_index] == self.map_id:
-                    return path, head, border, text_detail, text_file_line, loads,
-                else:
-                    switch_map()
-                    return path, head, border, text_detail, text_file_line, loads, img_show, ax,
-
+                plt.savefig('figures' + '/' + 'planner-' + str(self.day_num) + '-' +
+                            times[0] + times[1] + times[2][0:3] + '.png', dpi=300)
             elif self.mode == 'shadow':
-                return path, head, border, text_detail,
+                plt.savefig('figures' + '/' + 'shadow-' +
+                            times[0] + times[1] + times[2][0:3] + '.png', dpi=300)
 
-        fig, ax = plt.subplots(figsize=(self.fig_width, self.fig_height))
-        head, = ax.plot([], [], linewidth=1.6, color='#ff00e6')
-        border, = ax.plot([], [], linewidth=1.6, color='#00b1fe')
-        path, = ax.plot([], [], linewidth=1, color='#a771fd')
-        text_detail = ax.text(30, 125, '  ', fontsize=8)
-        process = Pool(1)
-        if self.mode == 'planner':
-            loads, = ax.plot([], [], 'o', markersize=4, color='orange')
-            text_file_line = ax.text(30, 200, '  ', fontsize=6)
-            im_original = np.ones([5000, 5000])
-            img_show = ax.imshow(im_original, 'gray')
-        elif self.mode == 'shadow':
-            im = plt.imread(self.map_path + '/' + map_id + '.png')
-            img_show = plt.imshow(im)
-        animation = FuncAnimation(fig, update, frames=[i for i in range(0, 1000)],
-                                  interval=1, blit=True, repeat=True)
-        plt.show()
-        mes.put('over')
+        func_dict = {
+            'jump': jump,
+            'speed': speed,
+            'auto': auto,
+            'pause': pause,
+            'clear_path': clear_path,
+            'hide_path': hide_path,
+            'clear_loads': clear_loads,
+            'hide_loads': hide_loads,
+            'stamp': stamp,
+        }
+
+        def check_load():
+            if self.other_list[self.end_index] == 'load':
+                self.loads_x.append(self.x_list[self.end_index])
+                self.loads_y.append(self.y_list[self.end_index])
 
         def check_mes():
             if not mes.empty():
-                process.apply(func=mes.get(), args=())
+                func = func_dict.get(mes.get())
+                func()
             if not self.pause_flag:
                 self.end_index += self.sing_aug
             if self.end_index >= self.data_count:
@@ -226,9 +257,9 @@ class Animate(object):
                                                                         self.theta_list[self.end_index])
 
         def get_file_line():
-            return 'in file: \"%30s\"  line: %7s  mapid: %5s' % (self.file_list[self.end_index],
-                                                                 self.line_list[self.end_index],
-                                                                 self.map_id)
+            return 'in file: \"%30s\"  line: %7s  Map ID: %5s' % (self.file_list[self.end_index],
+                                                                  self.line_list[self.end_index],
+                                                                  self.map_id)
 
         def get_loads():
             if not self.hide_loads:
@@ -236,64 +267,45 @@ class Animate(object):
             else:
                 return [], []
 
-        def jump():
-            sec = int(mes.get())
-            self.end_index += sec * self.log_speed
-            if self.end_index >= self.data_count:
-                self.end_index = self.data_count - 1
-            if self.end_index <= 1:
-                self.end_index = 1
-            if sec < 0:
-                self.beg_index = self.end_index
-
-        def speed():
-            new_speed = mes.get()
-            adjustFrame(new_speed)
-
-        def auto():
-            sec = int(mes.get())
-            self.auto_del = int(sec * self.log_speed)
-
-        def pause():
-            self.pause_flag = True if self.pause_flag is False else False
-
-        def clear_path():
-            self.beg_index = self.end_index
-            self.auto_del = 0
-
-        def hide_path():
-            self.hide_path = True if self.hide_path is False else False
-
-        def clear_load():
-            self.loads_x.clear()
-            self.loads_y.clear()
-
-        def hide_load():
-            self.hide_load = True if self.hide_load is False else False
-
-        def stamp():
-            print(self.time_list[self.end_index])
-            if not os.path.exists('figures'):
-                os.mkdir('figures')
-            times = str(self.time_list[self.end_index]).split(':')
-            if self.mode == 'planner':
-                plt.savefig('figures' + '/' + 'planner-' + str(self.day_num) + '-' +
-                            times[0] + times[1] + times[2][0:3] + '.png', dpi=300)
-            elif self.mode == 'shadow':
-                plt.savefig('figures' + '/' + 'shadow-' +
-                            times[0] + times[1] + times[2][0:3] + '.png', dpi=300)
-
-        def check_load():
-            if self.other_list[self.end_index] == 'load':
-                self.loads_x.append(self.x_list[self.end_index])
-                self.loads_y.append(self.y_list[self.end_index])
-
-        def adjustFrame(spd):
-            sec_aug = float(spd) * float(self.base_speed) * float(self.log_speed)
-            self.sing_aug = ceil(sec_aug / float(self.max_fps))
-            actual_rate = sec_aug / float(self.sing_aug)
-            self.sleepTime = float(1000) / actual_rate - 27
-
         def switch_map():
-            self.map_id = self.map_list[self.end_index]
+            pass
 
+        def update(no_use):
+            check_mes()
+            time.sleep(self.sleep_time / 1000)
+            path.set_data(get_path())
+            head.set_data(get_edges()[2:4])
+            border.set_data(get_edges()[0:2])
+            text_detail.set_text(get_detail())
+
+            if self.mode == 'planner':
+                text_file_line.set_text(get_file_line())
+                loads.set_data(get_loads())
+
+                if self.map_list[self.end_index] == self.map_id:
+                    return path, head, border, text_detail, text_file_line, loads,
+                else:
+                    switch_map()
+                    return path, head, border, text_detail, text_file_line, loads, img_show,
+
+            elif self.mode == 'shadow':
+                return path, head, border, text_detail,
+
+        self.map_id = map_id
+        fig, ax = plt.subplots(figsize=(10, 10))
+        head, = ax.plot([], [], linewidth=1.6, color='#ff00e6')
+        border, = ax.plot([], [], linewidth=1.6, color='#00b1fe')
+        path, = ax.plot([], [], linewidth=1, color='#a771fd')
+        text_detail = ax.text(30, 125, '  ', fontsize=8)
+        if self.mode == 'planner':
+            loads, = ax.plot([], [], 'o', markersize=4, color='orange')
+            text_file_line = ax.text(30, 200, '  ', fontsize=6)
+            im = plt.imread(self.map_path + '/' + str(self.map_id) + '.png')
+            img_show = plt.imshow(im, 'gray')
+        elif self.mode == 'shadow':
+            im = plt.imread(self.map_path + '/' + self.map_id + '.png')
+            img_show = plt.imshow(im)
+        animation = FuncAnimation(fig, update, frames=[i for i in range(0, 1000)],
+                                  interval=1, blit=True, repeat=True)
+        plt.show()
+        mes.put('over')
