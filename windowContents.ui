@@ -545,7 +545,7 @@
     <string>View log:</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QPushButton" name="button_planner">
    <property name="geometry">
     <rect>
      <x>300</x>
@@ -558,7 +558,7 @@
     <string>Planner</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_2">
+  <widget class="QPushButton" name="button_robotcom">
    <property name="geometry">
     <rect>
      <x>300</x>
@@ -571,7 +571,7 @@
     <string>Robotcom</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_3">
+  <widget class="QPushButton" name="button_slam">
    <property name="geometry">
     <rect>
      <x>300</x>
@@ -584,7 +584,7 @@
     <string>Slam</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_4">
+  <widget class="QPushButton" name="button_middle_end">
    <property name="geometry">
     <rect>
      <x>300</x>
@@ -597,7 +597,7 @@
     <string>Middle_end</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_5">
+  <widget class="QPushButton" name="button_view_all">
    <property name="geometry">
     <rect>
      <x>300</x>
@@ -610,7 +610,7 @@
     <string>View All</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label">
+  <widget class="QLabel" name="label_other">
    <property name="geometry">
     <rect>
      <x>310</x>
