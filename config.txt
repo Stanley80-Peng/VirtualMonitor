@@ -1,5 +1,9 @@
 default file path: '../planner'
 map path: '../maps' (cannot be edited in running)
+planner log path: '../planner' (cannot be edited in running)
+robotcom log path: '../robot' (cannot be edited in running)
+slam log path: '../slamnode' (cannot be edited in running)
+middle_end log path: '../middle_end' (cannot be edited in running)
 default map to show: '87700'
 default show mode: 'planner' (planner/shadow)
 default auto clear time: '60' seconds
@@ -7,8 +11,9 @@ planner mode log-writing: '1' log(s) per second
 planner mode speed 1x means playing: '1' second(s) per second
 shadow mode log-writing: '162' log(s) per second
 shadow mode speed 1x means playing: '0.125' second(s) per second
+shadow mode external variables path: '~/config/xxx.txt'
 max image refresh rate: '30' frames per second (depend on the graphic card on your computer)
 robot size in centimeter: '90' * '50'
-plot size: '16' * '14'  # 若非必要请勿修改
+plot size: '10' * '8'  # 若非必要请勿修改
 
 # 请在每行的单引号之间修改数据

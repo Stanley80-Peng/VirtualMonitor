@@ -52,7 +52,7 @@ class Ui_ToolWindow(Ui_Form):
         self.button_clear_path.clicked.connect(lambda: self.putMes('clear_path'))
         self.button_hide_path.clicked.connect(lambda: self.putMes('hide_path'))
         self.button_clear_load.clicked.connect(lambda: self.putMes('clear_load'))
-        self.button_hide_load.clicked.connect(lambda: self.putMes('view_log'))
+        self.button_save.clicked.connect(self.select_log)
         self.button_jump.clicked.connect(self.customize_jump)
         self.button_set.clicked.connect(self.set_auto_clear)
         self.button_stamp.clicked.connect(lambda: self.putMes('stamp'))
@@ -186,6 +186,9 @@ class Ui_ToolWindow(Ui_Form):
     def putMes(self, message):
         # print('Put message: ' + message)
         self.mes.put(message)
+
+    def select_log(self):
+        pass
 
 
 def show_ToolWindow():  # 此函数为生成 QWidget 的标准函数，非必要时请尽量不要修改

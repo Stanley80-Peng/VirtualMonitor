@@ -11,6 +11,11 @@ class Animate(object):
     def __init__(self, mode, date):
         self.map_id = ''
         self.map_path = ''
+        self.planner_path = ''
+        self.robot_com_path = ''
+        self.slam_path = ''
+        self.middle_end_path = ''
+
         self.day_num = int(date)
         self.data_count = 0
         self.mode = mode
@@ -208,7 +213,7 @@ class Animate(object):
             'clear_loads': clear_loads,
             'hide_loads': hide_loads,
             'stamp': stamp,
-            'view_log': view_log,
+            'view_all': view_all,
         }
 
         def check_load():
@@ -310,7 +315,7 @@ class Animate(object):
             img_show = plt.imshow(im, 'gray')
         elif self.mode == 'shadow':
             im = plt.imread(self.map_path + '/' + self.map_id + '.png')
-            img_show = plt.imshow(im)
+            img_show = plt.imshow(im, 'gray')
         animation = FuncAnimation(fig, update, frames=[i for i in range(0, 1000)],
                                   interval=1, blit=True, repeat=True)
         plt.axis('off')
