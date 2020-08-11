@@ -1,9 +1,10 @@
 from PyQt5.QtWidgets import QFileDialog, QMessageBox
 from windowContents import *
 from multiprocessing import Process, Queue
-from Animate_re import *
-from Data_shadow import *
-from Data_planner import *
+from AnimatePlanner import *
+from AnimateShadow import *
+from DataShadow import *
+from DataPlanner import *
 import os
 import sys
 import datetime as dt
@@ -14,13 +15,9 @@ class Ui_ToolWindow(Ui_Form):
     def initUi(self, Form):
         self.setupUi(Form)
         self.globals()
-        self.connectButtons()
-        self.getDefaults()
+        self.connect_buttons()
+        self.get_defaults()
         self.checkMapFolder()
-        self.debug()
-
-    def debug(self):
-        self.lineEdit_date.setText('0807')
 
     def checkMapFolder(self):
         if not os.path.exists(self.mapPath):
@@ -28,7 +25,7 @@ class Ui_ToolWindow(Ui_Form):
             exit(1)
 
     def globals(self):
-        self.mapPath = None
+        self.map_path = None
         self.mes = Queue()
         self.mapid = None
         self.isRunning = False
@@ -36,7 +33,7 @@ class Ui_ToolWindow(Ui_Form):
         self.canStartPlanner = False
         self.canStartShadow = False
 
-    def connectButtons(self):
+    def connect_buttons(self):
         self.button_browse.clicked.connect(self.browse)
         self.button_init.clicked.connect(self.init)
         self.button_start.clicked.connect(self.start)
@@ -52,12 +49,17 @@ class Ui_ToolWindow(Ui_Form):
         self.button_clear_path.clicked.connect(lambda: self.putMes('clear_path'))
         self.button_hide_path.clicked.connect(lambda: self.putMes('hide_path'))
         self.button_clear_load.clicked.connect(lambda: self.putMes('clear_load'))
-        self.button_save.clicked.connect(self.select_log)
+        self.button_save.clicked.connect(lambda: self.putMes('savefig'))
         self.button_jump.clicked.connect(self.customize_jump)
         self.button_set.clicked.connect(self.set_auto_clear)
         self.button_stamp.clicked.connect(lambda: self.putMes('stamp'))
+        self.button_planner.clicked.connect(lambda: self.putMes('planner'))
+        self.button_robotcom.clicked.connect(lambda: self.putMes('robotcom'))
+        self.button_slam.clicked.connect(lambda: self.putMes('slam'))
+        self.button_middle_end.clicked.connect(lambda: self.putMes('middle_end'))
+        self.button_view_all.clicked.connect(lambda: self.putMes('view_all'))
 
-    def getDefaults(self):
+    def get_defaults(self):
         f = open('config.txt', 'r', encoding='UTF-8')
         if not f:
             # print('Fail to open\'config.txt\'')
@@ -102,7 +104,7 @@ class Ui_ToolWindow(Ui_Form):
             return
 
         if self.radio_planner.isChecked():
-            proc_data_in_planner_mode = Data_planner(self.filepath, self.mapid)
+            proc_data_in_planner_mode = DataPlanner(self.filepath, self.mapid)
             del proc_data_in_planner_mode
         elif self.radio_shadow.isChecked():
             proc_data_in_shadow_mode = Data_slam(self.filepath)
@@ -137,7 +139,7 @@ class Ui_ToolWindow(Ui_Form):
                 return
 
             showDay = self.lineEdit_date.text()
-            show = Animate('planner', showDay)
+            show = AnimatePlanner('planner', showDay)
 
             if show.plan_get() == 0:
                 QMessageBox.information(None, 'ERROR', 'No data of entered date!')
@@ -154,7 +156,7 @@ class Ui_ToolWindow(Ui_Form):
                 QMessageBox.information(None, 'ERROR', 'Please check the infos above and init!')
                 return
 
-            show = Animate('shadow', -1)
+            show = AnimatePlanner('shadow', -1)
             show.shad_get(self.mapid)
             self.isRunning = True
             shad = Process(target=show.start, args=(self.mes, self.mapid,))

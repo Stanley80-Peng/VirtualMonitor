@@ -5,7 +5,7 @@ from multiprocessing import Pool
 import multiprocessing as mp
 
 
-class Data_slam(object):
+class DataShadow(object):
     def __init__(self, path):
         proc_dir(path)
 

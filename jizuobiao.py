@@ -36,12 +36,8 @@ def animate():
     plt.show()
 
 
-
-
-
 if __name__ == '__main__':
     print(time.perf_counter())
     read()
     print(time.perf_counter())
     animate()
-

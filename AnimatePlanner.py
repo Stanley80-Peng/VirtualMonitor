@@ -1,15 +1,13 @@
 import os
+import re
 import time
 import matplotlib.pyplot as plt
-import subprocess
 from math import *
-from PIL import Image
 from matplotlib.animation import FuncAnimation
 
 
 class AnimatePlanner(object):
-    def __init__(self, mode, date):
-        self.map_id = ''
+    def __init__(self, date):
         self.map_path = ''
         self.planner_path = ''
         self.robot_com_path = ''
@@ -18,23 +16,16 @@ class AnimatePlanner(object):
 
         self.day_num = int(date)
         self.data_count = 0
-        self.mode = mode
 
         self.time_list = []  # in csv col-2 [1]
         self.x_list = []  # in csv col-3 [2]
         self.y_list = []  # in csv col-4 [3]
         self.theta_list = []  # in csv col-5 [4]
         self.v_list = []  # in csv col-6 [5] (only in planner mode)
-        self.file_list = []  # in csv col-7 [6] (only in planner mode)
-        self.line_list = []  # in csv col-8 [7] (only in planner mode)
-        self.map_list = []  # in csv col-9 [8] (only in planner mode)
         self.other_list = []  # in csv col-10 [9] (only in planner mode)
 
         self.loads_x = []  # (only in planner mode)
         self.loads_y = []  # (only in planner mode)
-
-        self.x_excursion = 0  # (only in shadow mode)
-        self.y_excursion = 0  # (only in shadow mode)
 
         self.img_height = 0  # used to adjust plot limits
         self.img_width = 0  # used to adjust plot limits
@@ -54,10 +45,9 @@ class AnimatePlanner(object):
 
         self.pause_flag = False
         self.hide_path = False
-        self.hide_loads = False  # (only in planner mode)
 
-        self.fig_width = 10
-        self.fig_height = 10
+        self.fig_width = 0
+        self.fig_height = 0
 
         self.get_config()
 
@@ -66,27 +56,28 @@ class AnimatePlanner(object):
         lines = f.readlines()
 
         self.map_path = lines[1].split('\'')[1]
-        self.auto_del = int(lines[4].split('\'')[1])
+        self.auto_del = int(lines[10].split('\'')[1])
 
-        if self.mode == 'planner':
-            self.log_speed = int(lines[5].split('\'')[1])
-            self.base_speed = float(lines[6].split('\'')[1])
-        elif self.mode == 'shadow':
-            self.log_speed = int(lines[7].split('\'')[1])
-            self.base_speed = float(lines[8].split('\'')[1])
+        self.planner_path = lines[3].split('\'')[1]
+        self.robot_com_path = lines[4].split('\'')[1]
+        self.slam_path = lines[5].split('\'')[1]
+        self.middle_end_path = lines[6].split('\'')[1]
 
-        self.max_fps = int(lines[9].split('\'')[1])
-        self.len_robot = int(lines[10].split('\'')[1]) / 2
-        self.wid_robot = int(lines[10].split('\'')[3]) / 2
-        self.fig_width = int(lines[11].split('\'')[1])
-        self.fig_height = int(lines[11].split('\'')[3])
+        self.log_speed = int(lines[12].split('\'')[1])
+        self.base_speed = float(lines[13].split('\'')[1])
+
+        self.max_fps = int(lines[18].split('\'')[1])
+        self.len_robot = int(lines[19].split('\'')[1]) / 2
+        self.wid_robot = int(lines[19].split('\'')[3]) / 2
+        self.fig_width = int(lines[20].split('\'')[1])
+        self.fig_height = int(lines[20].split('\'')[3])
 
         f.close()
 
     def plan_get(self):
-        DIR = os.listdir('./positions/planner')
-        DIR.sort()
-        for file in DIR:
+        _dir = os.listdir('./positions/planner')
+        _dir.sort()
+        for file in _dir:
             with open('./positions/planner/' + file, encoding='UTF-8') as f:
                 self.proc_csv_plan(f)
         return self.data_count
@@ -103,47 +94,10 @@ class AnimatePlanner(object):
             self.y_list.append(int(info[3]))
             self.theta_list.append(float(info[4]))
             self.v_list.append(float(info[5]))
-            self.file_list.append(info[6])
-            self.line_list.append(info[7])
-            self.map_list.append(info[8])
-            self.other_list.append(info[9])
+            self.other_list.append(info[6])
             self.data_count += 1
 
-    def shad_get(self, map_id):
-        self.slam_get(map_id)
-
-    def slam_get(self, map_id):
-        DIR = os.listdir('./positions/shadow/slam')
-        DIR.sort()
-        for file in DIR:
-            with open('./positions/shadow/slam/' + file, encoding='UTF-8') as f:
-                self.proc_csv_slam(f, map_id)
-
-    def proc_csv_slam(self, f, map_id):
-        self.get_excursion(map_id)
-        lines = f.readlines()
-        for line in lines:
-            line = line.strip('\n')
-            info = line.split(',')
-            self.time_list.append(info[0] + '.' + info[1])
-            self.x_list.append(int(float(info[2]) * 50 - self.x_excursion))
-            self.y_list.append(int(self.img_height - (float(info[3]) * 50 - self.y_excursion * 50)))
-            self.theta_list.append(float(-2 * atan2(float(info[7]), float(info[8]))))
-            self.data_count += 1
-        f.close()
-
-    def get_excursion(self, map_id):
-        conf = open('config.txt', 'r', encoding='UTF-8')
-        conf.readline()
-        line = conf.readline()
-        self.map_path = line.split('\'')[1]
-        conf.close()
-        mapJson = open(self.map_path + '/' + str(map_id) + '.json')
-        line = mapJson.readline()
-        self.x_excursion = float(line.split(':')[3][0:9])
-        self.y_excursion = float(line.split(':')[4][0:9])
-
-    def start(self, mes, map_id, file_path):
+    def start(self, mes, map_id):
 
         def jump():
             sec = int(mes.get())
@@ -155,7 +109,7 @@ class AnimatePlanner(object):
             if sec < 0:
                 self.beg_index = self.end_index
 
-        def adjustFrame(spd):
+        def adjust_frame(spd):
             sec_aug = float(spd) * float(self.base_speed) * float(self.log_speed)
             self.sing_aug = ceil(sec_aug / float(self.max_fps))
             actual_rate = sec_aug / float(self.sing_aug)
@@ -163,7 +117,7 @@ class AnimatePlanner(object):
 
         def speed():
             new_speed = mes.get()
-            adjustFrame(new_speed)
+            adjust_frame(new_speed)
 
         def auto():
             sec = int(mes.get())
@@ -186,22 +140,101 @@ class AnimatePlanner(object):
         def hide_loads():
             self.hide_load = True if self.hide_load is False else False
 
+        def skip():
+            while True:
+                if not self.v_list[self.end_index]:
+                    self.end_index += 1
+                else:
+                    break
+
         def stamp():
             print(self.time_list[self.end_index])
+
+        def save_fig():
+            print('Save figure at ' + self.time_list[self.end_index])
             if not os.path.exists('figures'):
                 os.mkdir('figures')
             times = str(self.time_list[self.end_index]).split(':')
-            if self.mode == 'planner':
-                plt.savefig('figures' + '/' + 'planner-' + str(self.day_num) + '-' +
-                            times[0] + times[1] + times[2][0:3] + '.png', dpi=300)
-            elif self.mode == 'shadow':
-                plt.savefig('figures' + '/' + 'shadow-' +
-                            times[0] + times[1] + times[2][0:3] + '.png', dpi=300)
 
-        def view_log():
-            command = 'code --goto ' + str(file_path) + '/' + \
-                      self.file_list[self.end_index] + ':' + self.line_list[self.end_index]
-            os.system(command=command)
+            plt.savefig('figures' + '/' + 'planner-' + str(self.day_num) + '-' +
+                        times[0] + times[1] + times[2][0:3] + '.png', dpi=300)
+
+        def planner():
+            if not os.path.isdir(self.planner_path):
+                return
+            planners = os.listdir(self.planner_path)
+            date_time = str(self.day_num) + ' ' + self.time_list[self.end_index]
+            for file in planners:
+                if re.search('INFO', str(file)) and  re.search('planner', str(file)) and re.search('log', str(file)):
+                    with open(self.planner_path + '/' + str(file)) as f:
+                        print(f.name)
+                        line_count = 0
+                        lines = f.readlines()
+                        for line in lines:
+                            line_count += 1
+                            if re.search(date_time, line):
+                                print(line)
+                                command = 'code --goto ' + self.planner_path + '/' + \
+                                          str(file) + ':' + str(line_count)
+                                os.system(command=command)
+                                return
+
+        def robot_com():
+            if not os.path.isdir(self.robot_com_path):
+                return
+            planners = os.listdir(self.robot_com_path)
+            date_time = str(self.day_num) + ' ' + self.time_list[self.end_index]
+            for file in planners:
+                if re.search('INFO', str(file)) and re.search('planner', str(file)):
+                    with open(self.robot_com_path + '/' + str(file)) as f:
+                        line_count = 0
+                        lines = f.readlines()
+                        for line in lines:
+                            if re.search(date_time, line):
+                                command = 'code --goto ' + self.robot_com_path + '/' + \
+                                          str(file) + ':' + str(line_count)
+                                os.system(command=command)
+                                return
+
+        def slam():
+            if not os.path.isdir(self.slam_path):
+                return
+            planners = os.listdir(self.slam_path)
+            date_time = str(self.day_num) + ' ' + self.time_list[self.end_index]
+            for file in planners:
+                if re.search('INFO', str(file)) and re.search('planner', str(file)):
+                    with open(self.slam_path + '/' + str(file)) as f:
+                        line_count = 0
+                        lines = f.readlines()
+                        for line in lines:
+                            if re.search(date_time, line):
+                                command = 'code --goto ' + self.slam_path + '/' + \
+                                          str(file) + ':' + str(line_count)
+                                os.system(command=command)
+                                return
+
+        def middle_end():
+            if not os.path.isdir(self.middle_end_path):
+                return
+            planners = os.listdir(self.middle_end_path)
+            date_time = str(self.day_num) + ' ' + self.time_list[self.end_index]
+            for file in planners:
+                if re.search('INFO', str(file)) and re.search('planner', str(file)):
+                    with open(self.middle_end_path + '/' + str(file)) as f:
+                        line_count = 0
+                        lines = f.readlines()
+                        for line in lines:
+                            if re.search(date_time, line):
+                                command = 'code --goto ' + self.middle_end_path + '/' + \
+                                          str(file) + ':' + str(line_count)
+                                os.system(command=command)
+                                return
+
+        def view_all():
+            planner()
+            robot_com()
+            slam()
+            middle_end()
 
         func_dict = {
             'jump': jump,
@@ -212,7 +245,13 @@ class AnimatePlanner(object):
             'hide_path': hide_path,
             'clear_loads': clear_loads,
             'hide_loads': hide_loads,
+            'skip': skip,
             'stamp': stamp,
+            'save_fig': save_fig,
+            'planner': planner,
+            'robot_com': robot_com,
+            'slam': slam,
+            'middle_end': middle_end,
             'view_all': view_all,
         }
 
@@ -229,8 +268,7 @@ class AnimatePlanner(object):
                 self.end_index += self.sing_aug
             if self.end_index >= self.data_count:
                 self.end_index = self.data_count - 1
-            if self.mode == 'planner':
-                check_load()
+            check_load()
 
         def get_path():
             if not self.hide_path:
@@ -248,13 +286,13 @@ class AnimatePlanner(object):
             points_x = [0, 0, 0, 0, 0]
             points_y = [0, 0, 0, 0, 0]
             phi = atan(self.wid_robot / self.len_robot)
-            theta_A = self.theta_list[self.end_index] - phi
+            theta_a = self.theta_list[self.end_index] - phi
             half_diag = sqrt(pow(self.len_robot, 2) + pow(self.wid_robot, 2)) / 2
-            points_x[0] = points_x[4] = half_diag * cos(theta_A) + self.x_list[self.end_index]
-            points_y[0] = points_y[4] = half_diag * sin(theta_A) + self.y_list[self.end_index]
-            theta_B = self.theta_list[self.end_index] + pi + phi
-            points_x[1] = half_diag * cos(theta_B) + self.x_list[self.end_index]
-            points_y[1] = half_diag * sin(theta_B) + self.y_list[self.end_index]
+            points_x[0] = points_x[4] = half_diag * cos(theta_a) + self.x_list[self.end_index]
+            points_y[0] = points_y[4] = half_diag * sin(theta_a) + self.y_list[self.end_index]
+            theta_b = self.theta_list[self.end_index] + pi + phi
+            points_x[1] = half_diag * cos(theta_b) + self.x_list[self.end_index]
+            points_y[1] = half_diag * sin(theta_b) + self.y_list[self.end_index]
             points_x[2] = 2 * self.x_list[self.end_index] - points_x[0]
             points_y[2] = 2 * self.y_list[self.end_index] - points_y[0]
             points_x[3] = 2 * self.x_list[self.end_index] - points_x[1]
@@ -267,20 +305,6 @@ class AnimatePlanner(object):
                                                                         self.y_list[self.end_index],
                                                                         self.theta_list[self.end_index])
 
-        def get_file_line():
-            return 'in file: \"%30s\"  line: %7s  Map ID: %5s' % (self.file_list[self.end_index],
-                                                                  self.line_list[self.end_index],
-                                                                  self.map_id)
-
-        def get_loads():
-            if not self.hide_loads:
-                return self.loads_x, self.loads_y
-            else:
-                return [], []
-
-        def switch_map():
-            pass
-
         def update(no_use):
             check_mes()
             time.sleep(self.sleep_time / 1000)
@@ -288,35 +312,21 @@ class AnimatePlanner(object):
             head.set_data(get_edges()[2:4])
             border.set_data(get_edges()[0:2])
             text_detail.set_text(get_detail())
+            loads.set_data(self.loads_x, self.loads_y)
 
-            if self.mode == 'planner':
-                text_file_line.set_text(get_file_line())
-                loads.set_data(get_loads())
+            return path, head, border, text_detail, loads,
 
-                if self.map_list[self.end_index] == self.map_id:
-                    return path, head, border, text_detail, text_file_line, loads,
-                else:
-                    switch_map()
-                    return path, head, border, text_detail, text_file_line, loads, img_show,
-
-            elif self.mode == 'shadow':
-                return path, head, border, text_detail,
-
-        self.map_id = map_id
         fig, ax = plt.subplots(figsize=(10, 10))
         head, = ax.plot([], [], linewidth=1.6, color='#ff00e6')
         border, = ax.plot([], [], linewidth=1.6, color='#00b1fe')
         path, = ax.plot([], [], linewidth=1, color='#a771fd')
         text_detail = ax.text(30, 125, '  ', fontsize=8)
-        if self.mode == 'planner':
-            loads, = ax.plot([], [], 'o', markersize=4, color='orange')
-            text_file_line = ax.text(30, 200, '  ', fontsize=6)
-            im = plt.imread(self.map_path + '/' + str(self.map_id) + '.png')
-            img_show = plt.imshow(im, 'gray')
-        elif self.mode == 'shadow':
-            im = plt.imread(self.map_path + '/' + self.map_id + '.png')
-            img_show = plt.imshow(im, 'gray')
-        animation = FuncAnimation(fig, update, frames=[i for i in range(0, 1000)],
+        loads, = ax.plot([], [], 'o', markersize=4, color='orange')
+
+        im = plt.imread(self.map_path + '/' + str(map_id) + '.png')
+        img_show = plt.imshow(im, 'gray')
+
+        animation = FuncAnimation(fig, update, frames=1000,
                                   interval=1, blit=True, repeat=True)
         plt.axis('off')
         plt.show()
