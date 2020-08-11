@@ -23,7 +23,7 @@ def proc_dir(path):
             for file in files:
                 with open(path + '/' + str(dir_in) + '/' + file, 'rb') as f:
                     if f.name.split('/')[-1].find('slam') + 1:
-                        proc_slam(f, str(dir_in),)
+                        proc_slam(f, str(dir_in), )
                     # p.apply_async(proc_slam, args=(f, str(dir),))
     p.close()
     p.join()
@@ -82,4 +82,4 @@ def proc_slam(in_file, dir_name):
 
 
 if __name__ == '__main__':
-    data = Data_slam('ShadowData/2020-07-31-17-04-52')
+    data = Data_slam('../ShadowData/2020-07-31-17-04-52')
