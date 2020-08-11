@@ -52,7 +52,7 @@ class Ui_ToolWindow(Ui_Form):
         self.button_clear_path.clicked.connect(lambda: self.putMes('clear_path'))
         self.button_hide_path.clicked.connect(lambda: self.putMes('hide_path'))
         self.button_clear_load.clicked.connect(lambda: self.putMes('clear_load'))
-        self.button_hide_load.clicked.connect(lambda: self.putMes('hide_load'))
+        self.button_hide_load.clicked.connect(lambda: self.putMes('view_log'))
         self.button_jump.clicked.connect(self.customize_jump)
         self.button_set.clicked.connect(self.set_auto_clear)
         self.button_stamp.clicked.connect(lambda: self.putMes('stamp'))
@@ -102,7 +102,7 @@ class Ui_ToolWindow(Ui_Form):
             return
 
         if self.radio_planner.isChecked():
-            proc_data_in_planner_mode = Data_planner(self.filepath)
+            proc_data_in_planner_mode = Data_planner(self.filepath, self.mapid)
             del proc_data_in_planner_mode
         elif self.radio_shadow.isChecked():
             proc_data_in_shadow_mode = Data_slam(self.filepath)
@@ -144,7 +144,7 @@ class Ui_ToolWindow(Ui_Form):
                 return
 
             self.isRunning = True
-            plan = Process(target=show.start, args=(self.mes, self.mapid,))
+            plan = Process(target=show.start, args=(self.mes, self.mapid, self.lineEdit_filepath.text()))
             plan.start()
             # show.start(mes=self.mes, mapid=self.mapid)
 

@@ -10,6 +10,7 @@ laser2File = [fold 'laser2Record.bin'];
 fid = fopen(laser1File, 'r');
 count = 0;
 %while ~feof(fid)
+
 for i= 1:20000
        count = count +1;
        time_stamp(count,:) = fread(fid, 2, 'uint32');
@@ -24,6 +25,7 @@ for i= 1:20000
        scan_time(count, :) = fread(fid, 1, 'float');
        range_min(count, :) = fread(fid, 1, 'float');
        range_max(count, :) = fread(fid, 1, 'float');
+       ranges[count][:]
 
        rangs_length = fread(fid, 1, 'uint32');
        ranges(count, :) = fread(fid, rangs_length , 'float');

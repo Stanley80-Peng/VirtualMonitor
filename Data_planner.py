@@ -6,9 +6,10 @@ from multiprocessing import Pool
 
 
 class Data_planner(object):
-    def __init__(self, path):
+    def __init__(self, path, mapid):
         # self.starttime = time.perf_counter()  #
         self.fileCount = -1
+        self.mapid = mapid
         self.files = self.sort_dir(path)
         self.pool_files(path)
         # print(time.perf_counter() - self.starttime)  #
@@ -23,13 +24,12 @@ class Data_planner(object):
         for i in range(self.fileCount):
             if self.files[i].find('planner') + 1 and self.files[i].find('root') + 1 \
                     and self.files[i].find('INFO') + 1:
-                proc_file(path, self.files[i])
-                '''p.apply_async(proc_file, args=(path, self.files[i], self.mapid))
+                p.apply_async(proc_file, args=(path, self.files[i], self.mapid))
         p.close()
-        p.join()'''
+        p.join()
 
 
-def proc_file(path, filename):
+def proc_file(path, filename, mapid):
     def appe(data_line, line_num):
         pattern = re.compile(r'[(][^)]*[)]')
         find_list = pattern.findall(data_line)
@@ -51,10 +51,6 @@ def proc_file(path, filename):
         if len(x_list):
             other_list[len(x_list) - 1] = 'load'
 
-    '''def appe_swapMap(mapid):
-        if len(x_list):
-            other_list[len(x_list) - 1] = mapid'''
-
     def write_csv(name):  # 把有用的数据写到positions文件夹内的csv文件中
         if not os.path.exists('./positions'):
             os.mkdir('./positions')
@@ -69,7 +65,7 @@ def proc_file(path, filename):
             out_file.write(y_list[i] + ',')
             out_file.write(theta_list[i] + ',')
             out_file.write(v_list[i] + ',')
-            out_file.write(str(name).split('root.')[1] + ',')
+            out_file.write(str(name) + ',')
             out_file.write(str(line_list[i]) + ',')
             out_file.write(map_list[i] + ',')
             out_file.write(str(other_list[i]) + '\n')
@@ -84,6 +80,7 @@ def proc_file(path, filename):
     line_list = []
     map_list = []
     other_list = []
+    mapid = mapid
     linenum = 0
     f = open(path + '/' + filename)
     # print('open file ' + filename)  #
@@ -97,7 +94,8 @@ def proc_file(path, filename):
         elif re.search('Forklift Unload Success', line):
             appe_load()
         elif re.search('localization', line):
-            mapid = line.split('mapid: ')[1][0:5]
+            if re.search('mapid', line):
+                mapid = line.split('mapid: ')[1][0:5]
     f.close()
     write_csv(filename)
 

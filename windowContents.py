@@ -169,6 +169,6 @@ class Ui_Form(object):
         self.radio_shadow.setText(_translate("Form", "shadow-slam"))
         self.button_clear_load.setText(_translate("Form", "Clear Load"))
         self.button_hide_path.setText(_translate("Form", "Hide Path"))
-        self.button_hide_load.setText(_translate("Form", "Hide Load"))
+        self.button_hide_load.setText(_translate("Form", "View Log"))
         self.button_jump.setText(_translate("Form", "Jump"))
         self.label_jump.setText(_translate("Form", "Jump (sec):"))

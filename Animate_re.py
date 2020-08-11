@@ -1,7 +1,7 @@
 import os
 import time
 import matplotlib.pyplot as plt
-import numpy as np
+import subprocess
 from math import *
 from PIL import Image
 from matplotlib.animation import FuncAnimation
@@ -138,7 +138,7 @@ class Animate(object):
         self.x_excursion = float(line.split(':')[3][0:9])
         self.y_excursion = float(line.split(':')[4][0:9])
 
-    def start(self, mes, map_id):
+    def start(self, mes, map_id, file_path):
 
         def jump():
             sec = int(mes.get())
@@ -193,6 +193,11 @@ class Animate(object):
                 plt.savefig('figures' + '/' + 'shadow-' +
                             times[0] + times[1] + times[2][0:3] + '.png', dpi=300)
 
+        def view_log():
+            command = 'code --goto ' + str(file_path) + '/' + \
+                      self.file_list[self.end_index] + ':' + self.line_list[self.end_index]
+            os.system(command=command)
+
         func_dict = {
             'jump': jump,
             'speed': speed,
@@ -203,6 +208,7 @@ class Animate(object):
             'clear_loads': clear_loads,
             'hide_loads': hide_loads,
             'stamp': stamp,
+            'view_log': view_log,
         }
 
         def check_load():
@@ -307,5 +313,6 @@ class Animate(object):
             img_show = plt.imshow(im)
         animation = FuncAnimation(fig, update, frames=[i for i in range(0, 1000)],
                                   interval=1, blit=True, repeat=True)
+        plt.axis('off')
         plt.show()
         mes.put('over')
