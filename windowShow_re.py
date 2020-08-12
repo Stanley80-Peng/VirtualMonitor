@@ -15,12 +15,8 @@ class ToolWindow(Ui_Form):
     def init_ui(self, form):
         self.setupUi(form)
         self.declare_globals()
-        self.get_config()
+        self.set_config()
         self.connect_buttons()
-        self.debug()
-
-    def debug(self):
-        self.lineEdit_date.setText('0731')
 
     def declare_globals(self):
         self.map_path = ''
@@ -29,7 +25,7 @@ class ToolWindow(Ui_Form):
         self.is_running = False
         self.file_path = ''
 
-    def get_config(self):
+    def set_config(self):
         if not os.path.exists('config.txt'):
             QMessageBox.information(None, 'ERROR', 'Failed to open config file!\nPlease clone again!' )
             exit(1)
@@ -47,6 +43,9 @@ class ToolWindow(Ui_Form):
             self.radio_shadow.setChecked(True)
         self.lineEdit_auto.setText(str(lines[10].split('\'')[1]))
         f.close()
+
+        default_time = str(dt.datetime.now()).split('-')
+        self.lineEdit_date.setText(default_time[1] + default_time[2][0:2])
 
     def connect_buttons(self):
         self.button_browse.clicked.connect(self.browse)
@@ -97,7 +96,9 @@ class ToolWindow(Ui_Form):
             return
 
         if self.radio_planner.isChecked():
-            DataPlanner(self.file_path)
+            if not DataPlanner(self.file_path).valid_file_count:
+                QMessageBox.information(None, 'ERROR', 'No valid data in selected folder!')
+                return
         elif self.radio_shadow.isChecked():
             DataShadow(self.file_path)
         else:
@@ -128,6 +129,10 @@ class ToolWindow(Ui_Form):
                 QMessageBox.information(None, 'ERROR', 'Please init before replaying!')
                 return
 
+            if not len(os.listdir('./positions/planner')):
+                QMessageBox.information(None, 'ERROR', 'No valid data!\nPlease init again!')
+                return
+
             show = AnimatePlanner(self.lineEdit_date.text())
 
             if show.plan_get() == 0:
@@ -145,7 +150,7 @@ class ToolWindow(Ui_Form):
         elif self.radio_shadow.isChecked():
 
             QMessageBox.information(None, 'Note',
-                                    'Shadow mode is currently maintaining!\nPlease wait for the next version!')
+                                    'Shadow mode is currently under maintenance!\nPlease wait for the next version!')
 
             '''if not os.path.exists('./positions/shadow'):
                 QMessageBox.information(None, 'ERROR', 'Please check the infos above and init!')

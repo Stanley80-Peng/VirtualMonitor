@@ -5,14 +5,14 @@ import struct
 def readLaser(file_path):
     first_flag = True
     in_file = open(file_path, 'rb')
-    out_file = open('./positions/shadow/2019-11-24-16-27-46-lsr1.csv', 'w')
+    out_file = open('./positions/shadow/2020-07-31-17-04-52-laser1.csv', 'w')
     out_file.write('time1,time2,')
     for i in range(1081):
         out_file.write('data ' + str(i) + ',')
     out_file.write('\n')
-    inihour = 16
-    inimin = 27
-    inisec = 46
+    inihour = 17
+    inimin = 4
+    inisec = 52
     always_minus = -1
     data_count = 0
     while True:
@@ -40,7 +40,7 @@ def readLaser(file_path):
         temp = in_file.read(4)
         unpack = struct.unpack('=I', struct.pack('4B', *temp))
         data_float = float(unpack[0]) / pow(10, 9)
-        out_file.write('%s,' % str(data_float)[2:7])  # time2
+        out_file.write('0.%s,' % str(data_float)[2:7])  # time2
         temp = in_file.read(4)
         frame_id_length = struct.unpack('=I', struct.pack('4B', *temp))[0]
         for i in range(frame_id_length):
@@ -75,4 +75,4 @@ def readLaser(file_path):
 
 
 if __name__ == '__main__':
-    readLaser('../ShadowData/2019-11-24-16-27-46/laser1Record.bin')
+    readLaser('../ShadowData/2020-07-31-17-04-52/laser1Record.bin')

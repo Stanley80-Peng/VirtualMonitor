@@ -68,7 +68,7 @@ def proc_slam(in_file, dir_name):
         temp = in_file.read(4)
         unpack = struct.unpack('=I', struct.pack('4B', *temp))
         data_float = float(unpack[0]) / pow(10, 9)
-        out_file.write('%s,' % str(data_float)[2:7])
+        out_file.write('0.%s,' % str(data_float)[2:7])
         # #print('%u,' % unpack, end='')  #
         for i in range(7):
             temp = in_file.read(4)
@@ -82,4 +82,4 @@ def proc_slam(in_file, dir_name):
 
 
 if __name__ == '__main__':
-    data = Data_slam('../ShadowData/2020-07-31-17-04-52')
+    data = DataShadow('../ShadowData')

@@ -8,6 +8,7 @@ from multiprocessing import Pool
 class DataPlanner(object):
     def __init__(self, path):
         self.delete_existed_files()
+        self.valid_file_count = 0
         self.pool_files(path)
 
     @staticmethod
@@ -16,13 +17,13 @@ class DataPlanner(object):
         for file in files:
             os.remove('positions/planner/' + str(file))
 
-    @staticmethod
-    def pool_files(path):
+    def pool_files(self, path):
         p = Pool(mp.cpu_count())
         files = sorted(os.listdir(path))
         for file in files:
             if str(file).find('planner') + 1 and str(file).find('root') + 1 \
                     and str(file).find('INFO') + 1:
+                self.valid_file_count += 1
                 p.apply_async(proc_file, args=(path, str(file),))
         p.close()
         p.join()
