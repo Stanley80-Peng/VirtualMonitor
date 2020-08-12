@@ -166,18 +166,20 @@ class AnimatePlanner(object):
             date_time = str(self.day_num) + ' ' + self.time_list[self.end_index]
             for file in planners:
                 if re.search('INFO', str(file)) and  re.search('planner', str(file)) and re.search('log', str(file)):
-                    with open(self.planner_path + '/' + str(file)) as f:
-                        print(f.name)
-                        line_count = 0
-                        lines = f.readlines()
-                        for line in lines:
-                            line_count += 1
-                            if re.search(date_time, line):
-                                print(line)
-                                command = 'code --goto ' + self.planner_path + '/' + \
-                                          str(file) + ':' + str(line_count)
-                                os.system(command=command)
-                                return
+                    mtime = str(os.path.getmtime(self.planner_path + '/' + file.fname)).split('-')
+                    if not self.day_num > int(mtime[1] + mtime[2][0:2]):
+                        with open(self.planner_path + '/' + str(file)) as f:
+                            print(f.name)
+                            line_count = 0
+                            lines = f.readlines()
+                            for line in lines:
+                                line_count += 1
+                                if re.search(date_time, line):
+                                    print(line)
+                                    command = 'code --goto ' + self.planner_path + '/' + \
+                                              str(file) + ':' + str(line_count)
+                                    os.system(command=command)
+                                    return
 
         def robot_com():
             if not os.path.isdir(self.robot_com_path):
@@ -185,7 +187,7 @@ class AnimatePlanner(object):
             planners = os.listdir(self.robot_com_path)
             date_time = str(self.day_num) + ' ' + self.time_list[self.end_index]
             for file in planners:
-                if re.search('INFO', str(file)) and re.search('planner', str(file)):
+                if re.search('INFO', str(file)) and  re.search('planner', str(file)) and re.search('log', str(file)):
                     with open(self.robot_com_path + '/' + str(file)) as f:
                         line_count = 0
                         lines = f.readlines()
@@ -202,7 +204,7 @@ class AnimatePlanner(object):
             planners = os.listdir(self.slam_path)
             date_time = str(self.day_num) + ' ' + self.time_list[self.end_index]
             for file in planners:
-                if re.search('INFO', str(file)) and re.search('planner', str(file)):
+                if re.search('INFO', str(file)) and  re.search('planner', str(file)) and re.search('log', str(file)):
                     with open(self.slam_path + '/' + str(file)) as f:
                         line_count = 0
                         lines = f.readlines()
@@ -219,7 +221,7 @@ class AnimatePlanner(object):
             planners = os.listdir(self.middle_end_path)
             date_time = str(self.day_num) + ' ' + self.time_list[self.end_index]
             for file in planners:
-                if re.search('INFO', str(file)) and re.search('planner', str(file)):
+                if re.search('INFO', str(file)) and  re.search('middle_end', str(file)) and re.search('log', str(file)):
                     with open(self.middle_end_path + '/' + str(file)) as f:
                         line_count = 0
                         lines = f.readlines()
