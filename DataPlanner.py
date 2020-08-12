@@ -1,6 +1,5 @@
 import os
 import re
-import time
 import multiprocessing as mp
 from multiprocessing import Pool
 
@@ -81,11 +80,8 @@ def proc_file(path, filename):
             break
         if re.search('(x, y, theta)', line):
             append(line)
-        elif re.search('Forklift Unload Success', line):
+        elif re.search('Forklift is down', line):
             append_load()
-        elif re.search('localization', line):
-            if re.search('mapid', line):
-                mapid = line.split('mapid: ')[1][0:5]
     f.close()
     write_csv(filename)
 

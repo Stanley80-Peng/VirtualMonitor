@@ -27,7 +27,7 @@ class ToolWindow(Ui_Form):
 
     def set_config(self):
         if not os.path.exists('config.txt'):
-            QMessageBox.information(None, 'ERROR', 'Failed to open config file!\nPlease clone again!' )
+            QMessageBox.information(None, 'ERROR', 'Failed to open config file!\nPlease clone again!')
             exit(1)
 
         f = open('config.txt', 'r', encoding='UTF-8')
@@ -209,4 +209,3 @@ def show_ToolWindow():  # 此函数为生成 QWidget 的标准函数，非必要
 
 if __name__ == '__main__':
     show_ToolWindow()
-
