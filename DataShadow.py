@@ -41,7 +41,7 @@ def proc_slam(in_file, dir_name):
     always_minus = -1
 
     while True:
-        temp = in_file.read(4)
+        temp = in_file.read(2*4)
         if not temp:
             break
         unpack = struct.unpack('=I', struct.pack('4B', *temp))
