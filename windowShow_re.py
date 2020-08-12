@@ -30,6 +30,10 @@ class ToolWindow(Ui_Form):
             QMessageBox.information(None, 'ERROR', 'Failed to open config file!\nPlease clone again!')
             exit(1)
 
+        if not self.check_essentials():
+            QMessageBox.information(None, 'ERROR',
+                                    'Log paths are not all correct\nSome functions might not work well')
+
         f = open('config.txt', 'r', encoding='UTF-8')
         lines = f.readlines()
 
@@ -138,10 +142,6 @@ class ToolWindow(Ui_Form):
             if show.plan_get() == 0:
                 QMessageBox.information(None, 'ERROR', 'No data of entered date!')
                 return
-
-            if not self.check_essentials():
-                QMessageBox.information(None, 'ERROR',
-                                        'Log paths are not all correct\nSome functions might not work well')
 
             self.is_running = True
             plan = Process(target=show.start, args=(self.mes, self.map_id))

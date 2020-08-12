@@ -107,6 +107,17 @@ class AnimatePlanner(object):
 
     def start(self, mes, map_id):
 
+        fig, ax = plt.subplots(figsize=(10, 10))
+        head, = ax.plot([], [], linewidth=1.6, color='#ff00e6')
+        border, = ax.plot([], [], linewidth=1.6, color='#00b1fe')
+        path, = ax.plot([], [], linewidth=1, color='#a771fd')
+        text_detail = ax.text(30, 125, '  ', fontsize=8)
+        loads, = ax.plot([], [], 'o', markersize=4, color='orange')
+
+        im = plt.imread(self.map_path + '/' + str(map_id) + '.png')
+        plt.imshow(im, 'gray')
+        plt.axis('off')
+
         def jump():
             sec = int(mes.get())
             self.end_index += sec * self.log_speed
@@ -145,9 +156,6 @@ class AnimatePlanner(object):
             self.loads_x.clear()
             self.loads_y.clear()
 
-        def hide_loads():
-            self.hide_load = True if self.hide_load is False else False
-
         def skip():
             while True:
                 if not self.v_list[self.end_index]:
@@ -167,21 +175,21 @@ class AnimatePlanner(object):
             plt.savefig('figures' + '/' + 'planner-' + str(self.day_num) + '-' +
                         times[0] + times[1] + times[2][0:3] + '.png', dpi=300)
 
-        def find_line(file_path, identifier):
-            files = os.listdir(file_path)
+        def find_line(log_path, identifier):
+            files = os.listdir(log_path)
             date_time = str(self.day_num) + ' ' + self.time_list[self.end_index]
             for file in files:
                 if re.search('INFO', str(file)) and re.search(identifier, str(file)) and re.search('log', str(file)):
-                    mtime = str(os.path.getmtime(file_path + '/' + file)).split('-')
+                    mtime = str(os.path.getmtime(log_path + '/' + file)).split('-')
                     if not self.day_num > int(mtime[1] + mtime[2][0:2]):
-                        with open(file_path + '/' + str(file)) as f:
+                        with open(log_path + '/' + str(file)) as f:
                             line_count = 0
                             lines = f.readlines()
                             for line in lines:
                                 line_count += 1
                                 if re.search(date_time, line):
                                     print(line)
-                                    command = 'code --goto ' + file_path + '/' + \
+                                    command = 'code --goto ' + log_path + '/' + \
                                               str(file) + ':' + str(line_count)
                                     os.system(command=command)
                                     return
@@ -224,7 +232,6 @@ class AnimatePlanner(object):
             'clear_path': clear_path,
             'hide_path': hide_path,
             'clear_loads': clear_loads,
-            'hide_loads': hide_loads,
             'skip': skip,
             'stamp': stamp,
             'save_fig': save_fig,
@@ -298,20 +305,7 @@ class AnimatePlanner(object):
 
             return path, head, border, text_detail, loads,
 
-        fig, ax = plt.subplots(figsize=(10, 10))
-        head, = ax.plot([], [], linewidth=1.6, color='#ff00e6')
-        border, = ax.plot([], [], linewidth=1.6, color='#00b1fe')
-        path, = ax.plot([], [], linewidth=1, color='#a771fd')
-        text_detail = ax.text(30, 125, '  ', fontsize=8)
-        loads, = ax.plot([], [], 'o', markersize=4, color='orange')
-
-        im = plt.imread(self.map_path + '/' + str(map_id) + '.png')
-        plt.imshow(im, 'gray')
-
         animation = FuncAnimation(fig, update, frames=1000,
                                   interval=1, blit=True, repeat=True)
-        if not animation:
-            return
-        plt.axis('off')
         plt.show()
         mes.put('over')

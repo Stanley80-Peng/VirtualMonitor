@@ -54,7 +54,6 @@ def proc_file(path, filename):
         if not os.path.exists('./positions/planner'):
             os.mkdir('./positions/planner')
         out_file = open('./positions/planner/' + name + '.csv', 'w', encoding='UTF-8')
-        # out_file.write('day,time,x,y,theta,v\n')  #
         for i in range(len(x_list)):
             out_file.write(day_list[i] + ',')
             out_file.write(time_list[i] + ',')
