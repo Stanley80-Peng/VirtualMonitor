@@ -10,10 +10,6 @@ class DataShadow(object):
         proc_dir(path)
 
 
-'''tup_str = str(path).split('-')
-    start_time = tup_str[3] + ':' + tup_str[4] + ':' + tup_str[5]'''
-
-
 def proc_dir(path):
     p = Pool(mp.cpu_count())
     DIR = os.listdir(path)

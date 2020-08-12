@@ -10,9 +10,13 @@ class AnimatePlanner(object):
     def __init__(self, date):
         self.map_path = ''
         self.planner_path = ''
+        self.planner_identifier = ''
         self.robot_com_path = ''
+        self.robot_com_identifier = ''
         self.slam_path = ''
+        self.slam_identifier = ''
         self.middle_end_path = ''
+        self.middle_end_identifier = ''
 
         self.day_num = int(date)
         self.data_count = 0
@@ -59,9 +63,13 @@ class AnimatePlanner(object):
         self.auto_del = int(lines[10].split('\'')[1])
 
         self.planner_path = lines[3].split('\'')[1]
+        self.planner_identifier = lines[3].split('\'')[3]
         self.robot_com_path = lines[4].split('\'')[1]
+        self.robot_com_identifier = lines[4].split('\'')[3]
         self.slam_path = lines[5].split('\'')[1]
+        self.slam_identifier = lines[5].split('\'')[3]
         self.middle_end_path = lines[6].split('\'')[1]
+        self.middle_end_identifier = lines[6].split('\'')[3]
 
         self.log_speed = int(lines[12].split('\'')[1])
         self.base_speed = float(lines[13].split('\'')[1])
@@ -98,6 +106,17 @@ class AnimatePlanner(object):
             self.data_count += 1
 
     def start(self, mes, map_id):
+
+        fig, ax = plt.subplots(figsize=(10, 10))
+        head, = ax.plot([], [], linewidth=1.6, color='#ff00e6')
+        border, = ax.plot([], [], linewidth=1.6, color='#00b1fe')
+        path, = ax.plot([], [], linewidth=1, color='#a771fd')
+        text_detail = ax.text(30, 125, '  ', fontsize=8)
+        loads, = ax.plot([], [], 'o', markersize=4, color='orange')
+
+        im = plt.imread(self.map_path + '/' + str(map_id) + '.png')
+        plt.imshow(im, 'gray')
+        plt.axis('off')
 
         def jump():
             sec = int(mes.get())
@@ -137,9 +156,6 @@ class AnimatePlanner(object):
             self.loads_x.clear()
             self.loads_y.clear()
 
-        def hide_loads():
-            self.hide_load = True if self.hide_load is False else False
-
         def skip():
             while True:
                 if not self.v_list[self.end_index]:
@@ -159,78 +175,48 @@ class AnimatePlanner(object):
             plt.savefig('figures' + '/' + 'planner-' + str(self.day_num) + '-' +
                         times[0] + times[1] + times[2][0:3] + '.png', dpi=300)
 
-        def planner():
-            if not os.path.isdir(self.planner_path):
-                return
-            planners = os.listdir(self.planner_path)
+        def find_line(log_path, identifier):
+            files = os.listdir(log_path)
             date_time = str(self.day_num) + ' ' + self.time_list[self.end_index]
-            for file in planners:
-                if re.search('INFO', str(file)) and  re.search('planner', str(file)) and re.search('log', str(file)):
-                    mtime = str(os.path.getmtime(self.planner_path + '/' + file.fname)).split('-')
+            for file in files:
+                if re.search('INFO', str(file)) and re.search(identifier, str(file)) and re.search('log', str(file)):
+                    mtime = str(os.path.getmtime(log_path + '/' + file)).split('-')
                     if not self.day_num > int(mtime[1] + mtime[2][0:2]):
-                        with open(self.planner_path + '/' + str(file)) as f:
-                            print(f.name)
+                        with open(log_path + '/' + str(file)) as f:
                             line_count = 0
                             lines = f.readlines()
                             for line in lines:
                                 line_count += 1
                                 if re.search(date_time, line):
                                     print(line)
-                                    command = 'code --goto ' + self.planner_path + '/' + \
+                                    command = 'code --goto ' + log_path + '/' + \
                                               str(file) + ':' + str(line_count)
                                     os.system(command=command)
                                     return
 
+        def planner():
+            if not os.path.isdir(self.planner_path):
+                print('Incorrect planner log path')
+                return
+            find_line(self.planner_path, self.planner_identifier)
+
         def robot_com():
             if not os.path.isdir(self.robot_com_path):
+                print('Incorrect robot_com log path')
                 return
-            planners = os.listdir(self.robot_com_path)
-            date_time = str(self.day_num) + ' ' + self.time_list[self.end_index]
-            for file in planners:
-                if re.search('INFO', str(file)) and  re.search('planner', str(file)) and re.search('log', str(file)):
-                    with open(self.robot_com_path + '/' + str(file)) as f:
-                        line_count = 0
-                        lines = f.readlines()
-                        for line in lines:
-                            if re.search(date_time, line):
-                                command = 'code --goto ' + self.robot_com_path + '/' + \
-                                          str(file) + ':' + str(line_count)
-                                os.system(command=command)
-                                return
+            find_line(self.robot_com_path, self.robot_com_identifier)
 
         def slam():
             if not os.path.isdir(self.slam_path):
+                print('Incorrect slam log path')
                 return
-            planners = os.listdir(self.slam_path)
-            date_time = str(self.day_num) + ' ' + self.time_list[self.end_index]
-            for file in planners:
-                if re.search('INFO', str(file)) and  re.search('planner', str(file)) and re.search('log', str(file)):
-                    with open(self.slam_path + '/' + str(file)) as f:
-                        line_count = 0
-                        lines = f.readlines()
-                        for line in lines:
-                            if re.search(date_time, line):
-                                command = 'code --goto ' + self.slam_path + '/' + \
-                                          str(file) + ':' + str(line_count)
-                                os.system(command=command)
-                                return
+            find_line(self.slam_path, self.slam_identifier)
 
         def middle_end():
             if not os.path.isdir(self.middle_end_path):
+                print('Incorrect middle_end log path')
                 return
-            planners = os.listdir(self.middle_end_path)
-            date_time = str(self.day_num) + ' ' + self.time_list[self.end_index]
-            for file in planners:
-                if re.search('INFO', str(file)) and  re.search('middle_end', str(file)) and re.search('log', str(file)):
-                    with open(self.middle_end_path + '/' + str(file)) as f:
-                        line_count = 0
-                        lines = f.readlines()
-                        for line in lines:
-                            if re.search(date_time, line):
-                                command = 'code --goto ' + self.middle_end_path + '/' + \
-                                          str(file) + ':' + str(line_count)
-                                os.system(command=command)
-                                return
+            find_line(self.middle_end_path, self.middle_end_identifier)
 
         def view_all():
             planner()
@@ -246,7 +232,6 @@ class AnimatePlanner(object):
             'clear_path': clear_path,
             'hide_path': hide_path,
             'clear_loads': clear_loads,
-            'hide_loads': hide_loads,
             'skip': skip,
             'stamp': stamp,
             'save_fig': save_fig,
@@ -308,6 +293,8 @@ class AnimatePlanner(object):
                                                                         self.theta_list[self.end_index])
 
         def update(no_use):
+            if not no_use + 1:
+                return
             check_mes()
             time.sleep(self.sleep_time / 1000)
             path.set_data(get_path())
@@ -318,18 +305,7 @@ class AnimatePlanner(object):
 
             return path, head, border, text_detail, loads,
 
-        fig, ax = plt.subplots(figsize=(10, 10))
-        head, = ax.plot([], [], linewidth=1.6, color='#ff00e6')
-        border, = ax.plot([], [], linewidth=1.6, color='#00b1fe')
-        path, = ax.plot([], [], linewidth=1, color='#a771fd')
-        text_detail = ax.text(30, 125, '  ', fontsize=8)
-        loads, = ax.plot([], [], 'o', markersize=4, color='orange')
-
-        im = plt.imread(self.map_path + '/' + str(map_id) + '.png')
-        img_show = plt.imshow(im, 'gray')
-
         animation = FuncAnimation(fig, update, frames=1000,
                                   interval=1, blit=True, repeat=True)
-        plt.axis('off')
         plt.show()
         mes.put('over')

@@ -198,10 +198,6 @@ class AnimatePlanner(object):
                 plt.savefig('figures' + '/' + 'shadow-' +
                             times[0] + times[1] + times[2][0:3] + '.png', dpi=300)
 
-        def view_log():
-            command = 'code --goto ' + str(file_path) + '/' + \
-                      self.file_list[self.end_index] + ':' + self.line_list[self.end_index]
-            os.system(command=command)
 
         func_dict = {
             'jump': jump,
@@ -213,7 +209,6 @@ class AnimatePlanner(object):
             'clear_loads': clear_loads,
             'hide_loads': hide_loads,
             'stamp': stamp,
-            'view_all': view_all,
         }
 
         def check_load():

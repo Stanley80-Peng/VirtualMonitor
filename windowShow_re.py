@@ -27,8 +27,12 @@ class ToolWindow(Ui_Form):
 
     def set_config(self):
         if not os.path.exists('config.txt'):
-            QMessageBox.information(None, 'ERROR', 'Failed to open config file!\nPlease clone again!' )
+            QMessageBox.information(None, 'ERROR', 'Failed to open config file!\nPlease clone again!')
             exit(1)
+
+        if not self.check_essentials():
+            QMessageBox.information(None, 'ERROR',
+                                    'Log paths are not all correct\nSome functions might not work well')
 
         f = open('config.txt', 'r', encoding='UTF-8')
         lines = f.readlines()
@@ -139,10 +143,6 @@ class ToolWindow(Ui_Form):
                 QMessageBox.information(None, 'ERROR', 'No data of entered date!')
                 return
 
-            if not self.check_essentials():
-                QMessageBox.information(None, 'ERROR',
-                                        'Log paths are not all correct\nSome functions might not work well')
-
             self.is_running = True
             plan = Process(target=show.start, args=(self.mes, self.map_id))
             plan.start()
@@ -209,4 +209,3 @@ def show_ToolWindow():  # 此函数为生成 QWidget 的标准函数，非必要
 
 if __name__ == '__main__':
     show_ToolWindow()
-
