@@ -38,37 +38,24 @@ def proc_slam(in_file, dir_name):
         os.mkdir('./positions/shadow')
 
     out_file = open('./positions/shadow/' + str(dir_name) + '-slam.csv', 'w', encoding='UTF-8')
-    tup_time = str(dir_name).split('-')
-    inihour = int(tup_time[3])
-    inimin = int(tup_time[4])
-    inisec = int(tup_time[5])
-    always_minus = -1
-
+    save_sec = 0
     while True:
-        temp = in_file.read(4)
+        temp = in_file.read(8)
         if not temp:
             break
-        unpack = struct.unpack('=I', struct.pack('4B', *temp))
-        if first_flag:
-            always_minus = int(unpack[0])
-            first_flag = False
-        cor_time = unpack[0] - always_minus
-        cor_time += inihour * 3600 + inimin * 60 + inisec
-        hour = int(cor_time / 3600)
-        if hour > 23:
-            hour -= 24
-        min = int((cor_time % 3600 - cor_time % 60) / 60)
-        if min > 59:
-            min -= 60
-        sec = int(cor_time % 60)
-        if sec > 59:
-            sec -= 60
-        out_file.write('%02d:%02d:%02d,' % (hour, min, sec))
+        '''unpack1 = struct.unpack('=I', struct.pack('4B', *temp))
         # #print('%u,' % unpack, end='')  #
         temp = in_file.read(4)
-        unpack = struct.unpack('=I', struct.pack('4B', *temp))
-        data_float = float(unpack[0]) / pow(10, 9)
-        out_file.write('0.%s,' % str(data_float)[2:7])
+        unpack2 = struct.unpack('=I', struct.pack('4B', *temp))'''
+        unpack_time = struct.unpack('II', temp)
+        sub_sec = int(str(unpack_time[1])[0:2])
+        sub_sec -= sub_sec % 3
+        now_sec = str(unpack_time[0]) + '.' + str(sub_sec)
+        if now_sec == save_sec:
+            in_file.read(4*7)
+            continue
+        save_sec = now_sec
+        out_file.write('%s,' % now_sec)
         # #print('%u,' % unpack, end='')  #
         for i in range(7):
             temp = in_file.read(4)
