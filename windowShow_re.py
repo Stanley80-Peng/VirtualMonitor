@@ -48,6 +48,10 @@ class ToolWindow(Ui_Form):
         self.lineEdit_auto.setText(str(lines[10].split('\'')[1]))
         f.close()
 
+        if not os.path.exists(self.map_path):
+            QMessageBox.information(None, 'ERROR', 'Please set the correct map path in \'config,txt\'!')
+            exit(1)
+
         default_time = str(dt.datetime.now()).split('-')
         self.lineEdit_date.setText(default_time[1] + default_time[2][0:2])
 

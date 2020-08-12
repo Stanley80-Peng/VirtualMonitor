@@ -12,6 +12,8 @@ class DataPlanner(object):
 
     @staticmethod
     def delete_existed_files():
+        if not os.path.isdir('positions') and os.path.isdir('positions/planner'):
+            return
         files = os.listdir('positions/planner')
         for file in files:
             os.remove('positions/planner/' + str(file))
