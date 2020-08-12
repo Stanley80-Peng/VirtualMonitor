@@ -50,8 +50,8 @@ def proc_slam(in_file, dir_name):
         save_sec = now_sec
         out_file.write('%s,' % now_sec)
         # #print('%u,' % unpack, end='')  #
-        _float = in_file.read(4 * 7)
-        unpack_float = struct.unpack('f' * 7, _float)
+        _float = in_file.read(4*7)
+        unpack_float = struct.unpack('f'*7, _float)
         for i in range(6):
             out_file.write('%.4f' % unpack_float[i])
         out_file.write('%.4f\n' % unpack_float[6])
