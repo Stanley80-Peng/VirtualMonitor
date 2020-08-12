@@ -129,7 +129,7 @@ class AnimateShadow(object):
         path, = ax.plot([], [], linewidth=1, color='#a771fd')
         text_detail = ax.text(30, 125, '  ', fontsize=8)
         laser1, = ax.plot([], [], 'o', markersize=2)
-        laser1, = ax.plot([], [], 'o', markersize=2)
+        laser2, = ax.plot([], [], 'o', markersize=2)
         im = plt.imread(self.map_path + '/' + map_id + '.png')
         plt.imshow(im, 'gray')
         plt.axis('off')
