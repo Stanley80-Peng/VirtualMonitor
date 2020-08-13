@@ -1,4 +1,5 @@
 import os
+import time
 import struct
 
 
@@ -17,7 +18,6 @@ def readLaser(file_path):
     data_count = 0
     while True:
         data_count += 1
-        print(data_count)
         temp = in_file.read(4)
         if not temp:
             break
@@ -76,4 +76,6 @@ def readLaser(file_path):
 
 
 if __name__ == '__main__':
+    print(time.perf_counter())
     readLaser('../ShadowData/2020-07-31-17-04-52/laser1Record.bin')
+    print(time.perf_counter())
