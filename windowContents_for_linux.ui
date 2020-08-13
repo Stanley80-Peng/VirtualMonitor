@@ -206,9 +206,9 @@
   <widget class="QPushButton" name="button_forw30">
    <property name="geometry">
     <rect>
-     <x>10</x>
+     <x>15</x>
      <y>256</y>
-     <width>96</width>
+     <width>81</width>
      <height>31</height>
     </rect>
    </property>
@@ -222,9 +222,9 @@
   <widget class="QPushButton" name="button_forw15">
    <property name="geometry">
     <rect>
-     <x>100</x>
+     <x>105</x>
      <y>256</y>
-     <width>96</width>
+     <width>81</width>
      <height>31</height>
     </rect>
    </property>
@@ -238,9 +238,9 @@
   <widget class="QPushButton" name="button_forw1h">
    <property name="geometry">
     <rect>
-     <x>190</x>
+     <x>195</x>
      <y>256</y>
-     <width>96</width>
+     <width>81</width>
      <height>31</height>
     </rect>
    </property>
@@ -254,9 +254,9 @@
   <widget class="QPushButton" name="button_back20">
    <property name="geometry">
     <rect>
-     <x>10</x>
+     <x>15</x>
      <y>296</y>
-     <width>96</width>
+     <width>81</width>
      <height>31</height>
     </rect>
    </property>
@@ -270,9 +270,9 @@
   <widget class="QPushButton" name="button_back6">
    <property name="geometry">
     <rect>
-     <x>100</x>
+     <x>105</x>
      <y>296</y>
-     <width>96</width>
+     <width>81</width>
      <height>31</height>
     </rect>
    </property>
@@ -286,9 +286,9 @@
   <widget class="QPushButton" name="button_back30">
    <property name="geometry">
     <rect>
-     <x>190</x>
+     <x>195</x>
      <y>296</y>
-     <width>96</width>
+     <width>81</width>
      <height>31</height>
     </rect>
    </property>
@@ -318,9 +318,9 @@
   <widget class="QPushButton" name="button_clear_path">
    <property name="geometry">
     <rect>
-     <x>100</x>
+     <x>105</x>
      <y>335</y>
-     <width>96</width>
+     <width>81</width>
      <height>31</height>
     </rect>
    </property>
@@ -415,9 +415,9 @@
   <widget class="QPushButton" name="button_clear_load">
    <property name="geometry">
     <rect>
-     <x>190</x>
+     <x>195</x>
      <y>335</y>
-     <width>96</width>
+     <width>81</width>
      <height>31</height>
     </rect>
    </property>
@@ -431,9 +431,9 @@
   <widget class="QPushButton" name="button_hide_path">
    <property name="geometry">
     <rect>
-     <x>10</x>
+     <x>15</x>
      <y>335</y>
-     <width>96</width>
+     <width>81</width>
      <height>31</height>
     </rect>
    </property>
