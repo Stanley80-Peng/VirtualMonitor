@@ -180,8 +180,9 @@ class AnimatePlanner(object):
             date_time = str(self.day_num) + ' ' + self.time_list[self.end_index]
             for file in files:
                 if re.search('INFO', str(file)) and re.search(identifier, str(file)) and re.search('log', str(file)):
-                    mtime = str(os.path.getmtime(log_path + '/' + file)).split('-')
-                    if not self.day_num > int(mtime[1] + mtime[2][0:2]):
+                    local = time.localtime(os.path.getmtime(log_path + '/' + file))
+                    mtime = time.strftime('%Y-%m-%d-%H-%M-%S', local).split('-')
+                    if not self.day_num > int(mtime[1] + mtime[2]):
                         with open(log_path + '/' + str(file)) as f:
                             line_count = 0
                             lines = f.readlines()
