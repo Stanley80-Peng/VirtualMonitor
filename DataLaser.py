@@ -58,6 +58,7 @@ class DataLaser(object):
                 sec -= 60
             out_file.write('%02d:%02d:%02d,' % (hour, min, sec))  # time1
             f.read(36 + frame_id_length)
+            # f.read(32 + frame_id_length)
             # test = struct.unpack('I', f.read(4))[0]
             distances = struct.unpack('f'*ranges_length, f.read(4*ranges_length))
             for i in range(ranges_length):
