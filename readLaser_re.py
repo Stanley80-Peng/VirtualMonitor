@@ -6,7 +6,7 @@ import struct
 def readLaser(file_path):
     first_flag = True
     in_file = open(file_path, 'rb')
-    out_file = open('./positions/shadow/2020-07-31-17-04-52-laser1.csv', 'w')
+    out_file = open('./positions/shadow/2020-07-31-17-04-52-laser2.csv', 'w')
     inihour = 17
     inimin = 4
     inisec = 52
@@ -36,5 +36,5 @@ def readLaser(file_path):
 
 if __name__ == '__main__':
     print(time.perf_counter())
-    readLaser('../ShadowData/2020-07-31-17-04-52/laser1Record.bin')
+    readLaser('../ShadowData/2020-07-31-17-04-52/laser2Record.bin')
     print(time.perf_counter())

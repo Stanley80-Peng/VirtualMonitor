@@ -13,14 +13,14 @@ class DataLaser(object):
         self.res_path()
         self.always_minus = 0
         self.always_add = self.start_hour * 3600 + self.start_min * 60 + self.start_sec
-        '''self.frame_id_length = 0
+        self.frame_id_length = 0
         self.ranges_length = 0
-        self.intensities_length = 0'''
+        self.intensities_length = 0
 
         p = Pool(2)
-        # for i in range(2):
-            # p.apply_async(self.proc_laser, args=(path, i,))
-        self.proc_laser(path, 1, )
+        for i in range(2):
+            p.apply_async(self.proc_laser, args=(path, i,))
+        # self.proc_laser(path, 1, )
         p.close()
         p.join()
 
@@ -57,9 +57,9 @@ class DataLaser(object):
             if sec > 59:
                 sec -= 60
             out_file.write('%02d:%02d:%02d,' % (hour, min, sec))  # time1
-            f.read(32 + frame_id_length)
-            test = struct.unpack('I', f.read(4))[0]
-            distances = struct.unpack('f'*ranges_length, f.read(4*test))
+            f.read(36 + frame_id_length)
+            # test = struct.unpack('I', f.read(4))[0]
+            distances = struct.unpack('f'*ranges_length, f.read(4*ranges_length))
             for i in range(ranges_length):
                 out_file.write('%.4f,' % distances[i])
             out_file.write('\n')
