@@ -37,8 +37,6 @@ class DataLaser(object):
         data_count = 0
         while True:
             data_count += 1
-            if data_count == 26993:
-                pass
             temp = f.read(8)
             if not temp:
                 break
