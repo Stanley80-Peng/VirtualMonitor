@@ -159,7 +159,7 @@ class ToolWindow(Ui_Form):
             '''if not os.path.exists('./positions/shadow'):
                 QMessageBox.information(None, 'ERROR', 'Please check the infos above and init!')
                 return
-
+            delete_existed_files()
             show = AnimateShadow()
             show.shad_get(self.map_id)
             self.is_running = True

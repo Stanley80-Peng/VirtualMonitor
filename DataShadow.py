@@ -7,7 +7,6 @@ import multiprocessing as mp
 
 class DataShadow(object):
     def __init__(self, path):
-        delete_existed_files()
         proc_dir(path)
 
 
