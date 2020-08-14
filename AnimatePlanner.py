@@ -126,7 +126,8 @@ class AnimatePlanner(object):
             if self.end_index <= 1:
                 self.end_index = 1
             if sec < 0:
-                self.beg_index = self.end_index
+                if self.end_index + sec < self.beg_index:
+                    self.beg_index = self.end_index
 
         def adjust_frame(spd):
             sec_aug = float(spd) * float(self.base_speed) * float(self.log_speed)
@@ -176,13 +177,20 @@ class AnimatePlanner(object):
                         times[0] + times[1] + times[2][0:3] + '.png', dpi=300)
 
         def find_line(log_path, identifier):
-            files = os.listdir(log_path)
-            date_time = str(self.day_num) + ' ' + self.time_list[self.end_index]
+            files = sorted(os.listdir(log_path))
+            time_tup = str(self.time_list[self.end_index]).split(':')
+            if identifier == 'planner' or identifier == 'slamNode' or identifier == 'robotcomm':
+                date_time = str(self.day_num) + ' ' + time_tup[0] + ':' + time_tup[1]
+            else:
+                date_time = str(self.day_num) + ' ' + time_tup[0]
+            # print(date_time)
             for file in files:
                 if re.search('INFO', str(file)) and re.search(identifier, str(file)) and re.search('log', str(file)):
                     local = time.localtime(os.path.getmtime(log_path + '/' + file))
                     mtime = time.strftime('%Y-%m-%d-%H-%M-%S', local).split('-')
-                    if not self.day_num > int(mtime[1] + mtime[2]):
+                    # print(int(mtime[1] + mtime[2]))
+                    if not self.day_num - 1 > int(mtime[1] + mtime[2]):
+                        # print('searching ' + file)
                         with open(log_path + '/' + str(file)) as f:
                             line_count = 0
                             lines = f.readlines()

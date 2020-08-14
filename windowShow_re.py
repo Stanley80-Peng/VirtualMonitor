@@ -70,7 +70,7 @@ class ToolWindow(Ui_Form):
         self.button_skip.clicked.connect(lambda: self.mes.put('skip'))
         self.button_clear_path.clicked.connect(lambda: self.mes.put('clear_path'))
         self.button_hide_path.clicked.connect(lambda: self.mes.put('hide_path'))
-        self.button_clear_load.clicked.connect(lambda: self.mes.put('clear_load'))
+        self.button_clear_load.clicked.connect(lambda: self.mes.put('clear_loads'))
         self.button_save.clicked.connect(lambda: self.mes.put('save_fig'))
         self.button_jump.clicked.connect(self.customize_jump)
         self.button_set.clicked.connect(self.set_auto_clear)
@@ -194,7 +194,6 @@ class ToolWindow(Ui_Form):
         self.mes.put(sec)
         
     def customize_jump(self):
-        self.mes.put('jump')
         self.jump(self.lineEdit_jump.text())
         
     def set_auto_clear(self):

@@ -1,10 +1,10 @@
-default file path: '../planner'
-map path: '../maps' (essential)
+default file path: '/home/airobot/log/planner'
+map path: '/home/airobot/maps' (essential)
 ==============All the log paths are unable to be modified in running=================
-planner log path: '../planner' with identifier 'planner'
-robotcom log path: '../robot' with identifier 'robotcomm'
-slam log path: '../slamnode' with identifier 'slamNode'
-middle_end log path: '../middle_end' with identifier 'middle_end'
+planner log path: '/home/airobot/log/planner' with identifier 'planner'
+robotcom log path: '/home/airobot/commander/modules/middle_end/log' with identifier 'robotcomm'
+slam log path: '/home/airobot/log' with identifier 'slamNode'
+middle_end log path: '/home/airobot/commander/modules/middle_end/log' with identifier 'middle_end'
 # empty line
 default map to show: '11002'
 default show mode: 'planner' (planner/shadow)
