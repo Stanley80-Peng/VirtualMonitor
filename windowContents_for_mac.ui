@@ -409,7 +409,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>shadow-slam</string>
+    <string>shadow</string>
    </property>
   </widget>
   <widget class="QPushButton" name="button_clear_load">
@@ -468,6 +468,9 @@
      <width>71</width>
      <height>32</height>
     </rect>
+   </property>
+   <property name="cursor">
+    <cursorShape>PointingHandCursor</cursorShape>
    </property>
    <property name="text">
     <string>Jump</string>
@@ -554,6 +557,9 @@
      <height>41</height>
     </rect>
    </property>
+   <property name="cursor">
+    <cursorShape>PointingHandCursor</cursorShape>
+   </property>
    <property name="text">
     <string>Planner</string>
    </property>
@@ -566,6 +572,9 @@
      <width>113</width>
      <height>41</height>
     </rect>
+   </property>
+   <property name="cursor">
+    <cursorShape>PointingHandCursor</cursorShape>
    </property>
    <property name="text">
     <string>Robotcom</string>
@@ -580,6 +589,9 @@
      <height>41</height>
     </rect>
    </property>
+   <property name="cursor">
+    <cursorShape>PointingHandCursor</cursorShape>
+   </property>
    <property name="text">
     <string>Slam</string>
    </property>
@@ -593,6 +605,9 @@
      <height>41</height>
     </rect>
    </property>
+   <property name="cursor">
+    <cursorShape>PointingHandCursor</cursorShape>
+   </property>
    <property name="text">
     <string>Middle_end</string>
    </property>
@@ -605,6 +620,9 @@
      <width>113</width>
      <height>41</height>
     </rect>
+   </property>
+   <property name="cursor">
+    <cursorShape>PointingHandCursor</cursorShape>
    </property>
    <property name="text">
     <string>View All</string>
