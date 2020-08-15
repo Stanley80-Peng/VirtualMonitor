@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QFileDialog, QMessageBox
-from windowContents_for_mac import *
+from windowContents_for_linux import *
 from multiprocessing import Process, Queue
 from AnimatePlanner import *
 from AnimateShadow import *
