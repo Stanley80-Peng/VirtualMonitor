@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
-        Form.resize(425, 436)
+        Form.resize(425, 438)
         self.lineEdit_filepath = QtWidgets.QLineEdit(Form)
         self.lineEdit_filepath.setGeometry(QtCore.QRect(16, 35, 191, 21))
         self.lineEdit_filepath.setObjectName("lineEdit_filepath")
@@ -130,17 +130,17 @@ class Ui_Form(object):
         self.button_save.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.button_save.setObjectName("button_save")
         self.button_jump = QtWidgets.QPushButton(Form)
-        self.button_jump.setGeometry(QtCore.QRect(210, 372, 71, 31))
+        self.button_jump.setGeometry(QtCore.QRect(210, 377, 71, 31))
         self.button_jump.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.button_jump.setObjectName("button_jump")
         self.label_jump = QtWidgets.QLabel(Form)
-        self.label_jump.setGeometry(QtCore.QRect(20, 379, 81, 16))
+        self.label_jump.setGeometry(QtCore.QRect(20, 384, 81, 16))
         self.label_jump.setObjectName("label_jump")
         self.lineEdit_jump = QtWidgets.QLineEdit(Form)
-        self.lineEdit_jump.setGeometry(QtCore.QRect(140, 377, 61, 21))
+        self.lineEdit_jump.setGeometry(QtCore.QRect(140, 382, 61, 21))
         self.lineEdit_jump.setObjectName("lineEdit_jump")
         self.label_split = QtWidgets.QLabel(Form)
-        self.label_split.setGeometry(QtCore.QRect(290, 30, 21, 391))
+        self.label_split.setGeometry(QtCore.QRect(290, 22, 16, 391))
         self.label_split.setObjectName("label_split")
         self.label_view = QtWidgets.QLabel(Form)
         self.label_view.setGeometry(QtCore.QRect(310, 15, 111, 16))
@@ -202,30 +202,35 @@ class Ui_Form(object):
         self.button_save.setText(_translate("Form", "Save Fig"))
         self.button_jump.setText(_translate("Form", "Jump"))
         self.label_jump.setText(_translate("Form", "Jump (sec):"))
-        self.label_split.setText(_translate("Form", "|\n"
-"|\n"
-"|\n"
-"|\n"
-"|\n"
-"|\n"
-"|\n"
-"|\n"
-"|\n"
-"|\n"
-"|\n"
-"|\n"
-"|\n"
-"|\n"
-"|\n"
-"|\n"
-"|\n"
-"|\n"
-"|\n"
-"|\n"
-"|\n"
-"|\n"
-"|\n"
-"|"))
+        self.label_split.setText(_translate("Form", "·\n"
+"·\n"
+"·\n"
+"·\n"
+"·\n"
+"·\n"
+"·\n"
+"·\n"
+"·\n"
+"·\n"
+"·\n"
+"·\n"
+"·\n"
+"·\n"
+"     ·  ·  ·  ·  ·  ·  ·  ·  · \n"
+"·\n"
+"·\n"
+"·\n"
+"·\n"
+"·\n"
+"·\n"
+"·\n"
+"·\n"
+"·\n"
+"·\n"
+"·\n"
+"·\n"
+"·\n"
+""))
         self.label_view.setText(_translate("Form", "View log:"))
         self.button_planner.setText(_translate("Form", "Planner"))
         self.button_robotcom.setText(_translate("Form", "Robotcom"))
