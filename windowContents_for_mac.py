@@ -112,10 +112,10 @@ class Ui_Form(object):
         self.button_stamp.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.button_stamp.setObjectName("button_stamp")
         self.radio_planner = QtWidgets.QRadioButton(Form)
-        self.radio_planner.setGeometry(QtCore.QRect(35, 65, 101, 20))
+        self.radio_planner.setGeometry(QtCore.QRect(35, 63, 101, 20))
         self.radio_planner.setObjectName("radio_planner")
         self.radio_shadow = QtWidgets.QRadioButton(Form)
-        self.radio_shadow.setGeometry(QtCore.QRect(150, 65, 121, 20))
+        self.radio_shadow.setGeometry(QtCore.QRect(150, 63, 121, 20))
         self.radio_shadow.setObjectName("radio_shadow")
         self.button_clear_load = QtWidgets.QPushButton(Form)
         self.button_clear_load.setGeometry(QtCore.QRect(190, 335, 96, 41))
@@ -140,7 +140,7 @@ class Ui_Form(object):
         self.lineEdit_jump.setGeometry(QtCore.QRect(140, 382, 61, 21))
         self.lineEdit_jump.setObjectName("lineEdit_jump")
         self.label_split = QtWidgets.QLabel(Form)
-        self.label_split.setGeometry(QtCore.QRect(290, 30, 21, 391))
+        self.label_split.setGeometry(QtCore.QRect(290, 22, 121, 391))
         self.label_split.setObjectName("label_split")
         self.label_view = QtWidgets.QLabel(Form)
         self.label_view.setGeometry(QtCore.QRect(310, 15, 111, 16))
@@ -202,30 +202,35 @@ class Ui_Form(object):
         self.button_save.setText(_translate("Form", "Save Fig"))
         self.button_jump.setText(_translate("Form", "Jump"))
         self.label_jump.setText(_translate("Form", "Jump (sec):"))
-        self.label_split.setText(_translate("Form", "|\n"
-"|\n"
-"|\n"
-"|\n"
-"|\n"
-"|\n"
-"|\n"
-"|\n"
-"|\n"
-"|\n"
-"|\n"
-"|\n"
-"|\n"
-"|\n"
-"|\n"
-"|\n"
-"|\n"
-"|\n"
-"|\n"
-"|\n"
-"|\n"
-"|\n"
-"|\n"
-"|"))
+        self.label_split.setText(_translate("Form", "·\n"
+"·\n"
+"·\n"
+"·\n"
+"·\n"
+"·\n"
+"·\n"
+"·\n"
+"·\n"
+"·\n"
+"·\n"
+"·\n"
+"·\n"
+"·\n"
+"     ·  ·  ·  ·  ·  ·  ·  ·  · \n"
+"·\n"
+"·\n"
+"·\n"
+"·\n"
+"·\n"
+"·\n"
+"·\n"
+"·\n"
+"·\n"
+"·\n"
+"·\n"
+"·\n"
+"·\n"
+""))
         self.label_view.setText(_translate("Form", "View log:"))
         self.button_planner.setText(_translate("Form", "Planner"))
         self.button_robotcom.setText(_translate("Form", "Robotcom"))
