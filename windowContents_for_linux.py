@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
-        Form.resize(425, 438)
+        Form.resize(425, 436)
         self.lineEdit_filepath = QtWidgets.QLineEdit(Form)
         self.lineEdit_filepath.setGeometry(QtCore.QRect(16, 35, 191, 21))
         self.lineEdit_filepath.setObjectName("lineEdit_filepath")
@@ -66,27 +66,27 @@ class Ui_Form(object):
         self.label_multiple.setGeometry(QtCore.QRect(30, 234, 241, 16))
         self.label_multiple.setObjectName("label_multiple")
         self.button_forw30 = QtWidgets.QPushButton(Form)
-        self.button_forw30.setGeometry(QtCore.QRect(15, 256, 81, 31))
+        self.button_forw30.setGeometry(QtCore.QRect(10, 256, 91, 31))
         self.button_forw30.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.button_forw30.setObjectName("button_forw30")
         self.button_forw15 = QtWidgets.QPushButton(Form)
-        self.button_forw15.setGeometry(QtCore.QRect(105, 256, 81, 31))
+        self.button_forw15.setGeometry(QtCore.QRect(100, 256, 91, 31))
         self.button_forw15.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.button_forw15.setObjectName("button_forw15")
         self.button_forw1h = QtWidgets.QPushButton(Form)
-        self.button_forw1h.setGeometry(QtCore.QRect(195, 256, 81, 31))
+        self.button_forw1h.setGeometry(QtCore.QRect(190, 256, 91, 31))
         self.button_forw1h.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.button_forw1h.setObjectName("button_forw1h")
         self.button_back20 = QtWidgets.QPushButton(Form)
-        self.button_back20.setGeometry(QtCore.QRect(15, 296, 81, 31))
+        self.button_back20.setGeometry(QtCore.QRect(10, 296, 91, 31))
         self.button_back20.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.button_back20.setObjectName("button_back20")
         self.button_back6 = QtWidgets.QPushButton(Form)
-        self.button_back6.setGeometry(QtCore.QRect(105, 296, 81, 31))
+        self.button_back6.setGeometry(QtCore.QRect(100, 296, 91, 31))
         self.button_back6.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.button_back6.setObjectName("button_back6")
         self.button_back30 = QtWidgets.QPushButton(Form)
-        self.button_back30.setGeometry(QtCore.QRect(195, 296, 81, 31))
+        self.button_back30.setGeometry(QtCore.QRect(190, 296, 91, 31))
         self.button_back30.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.button_back30.setObjectName("button_back30")
         self.button_skip = QtWidgets.QPushButton(Form)
@@ -94,7 +94,7 @@ class Ui_Form(object):
         self.button_skip.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.button_skip.setObjectName("button_skip")
         self.button_clear_path = QtWidgets.QPushButton(Form)
-        self.button_clear_path.setGeometry(QtCore.QRect(105, 335, 81, 31))
+        self.button_clear_path.setGeometry(QtCore.QRect(100, 335, 91, 31))
         self.button_clear_path.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.button_clear_path.setObjectName("button_clear_path")
         self.label_auto = QtWidgets.QLabel(Form)
@@ -118,11 +118,11 @@ class Ui_Form(object):
         self.radio_shadow.setGeometry(QtCore.QRect(150, 63, 121, 20))
         self.radio_shadow.setObjectName("radio_shadow")
         self.button_clear_load = QtWidgets.QPushButton(Form)
-        self.button_clear_load.setGeometry(QtCore.QRect(195, 335, 81, 31))
+        self.button_clear_load.setGeometry(QtCore.QRect(190, 335, 91, 31))
         self.button_clear_load.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.button_clear_load.setObjectName("button_clear_load")
         self.button_hide_path = QtWidgets.QPushButton(Form)
-        self.button_hide_path.setGeometry(QtCore.QRect(15, 335, 81, 31))
+        self.button_hide_path.setGeometry(QtCore.QRect(10, 335, 91, 31))
         self.button_hide_path.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.button_hide_path.setObjectName("button_hide_path")
         self.button_save = QtWidgets.QPushButton(Form)
@@ -130,18 +130,15 @@ class Ui_Form(object):
         self.button_save.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.button_save.setObjectName("button_save")
         self.button_jump = QtWidgets.QPushButton(Form)
-        self.button_jump.setGeometry(QtCore.QRect(210, 377, 71, 31))
+        self.button_jump.setGeometry(QtCore.QRect(210, 372, 71, 31))
         self.button_jump.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.button_jump.setObjectName("button_jump")
         self.label_jump = QtWidgets.QLabel(Form)
-        self.label_jump.setGeometry(QtCore.QRect(20, 384, 81, 16))
+        self.label_jump.setGeometry(QtCore.QRect(20, 379, 81, 16))
         self.label_jump.setObjectName("label_jump")
         self.lineEdit_jump = QtWidgets.QLineEdit(Form)
-        self.lineEdit_jump.setGeometry(QtCore.QRect(140, 382, 61, 21))
+        self.lineEdit_jump.setGeometry(QtCore.QRect(140, 377, 61, 21))
         self.lineEdit_jump.setObjectName("lineEdit_jump")
-        self.label_split = QtWidgets.QLabel(Form)
-        self.label_split.setGeometry(QtCore.QRect(290, 10, 10, 391))
-        self.label_split.setObjectName("label_split")
         self.label_view = QtWidgets.QLabel(Form)
         self.label_view.setGeometry(QtCore.QRect(310, 15, 111, 16))
         self.label_view.setObjectName("label_view")
@@ -168,6 +165,16 @@ class Ui_Form(object):
         self.label_other = QtWidgets.QLabel(Form)
         self.label_other.setGeometry(QtCore.QRect(310, 270, 111, 16))
         self.label_other.setObjectName("label_other")
+        self.line = QtWidgets.QFrame(Form)
+        self.line.setGeometry(QtCore.QRect(284, 30, 20, 391))
+        self.line.setFrameShape(QtWidgets.QFrame.VLine)
+        self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.line.setObjectName("line")
+        self.line_2 = QtWidgets.QFrame(Form)
+        self.line_2.setGeometry(QtCore.QRect(294, 256, 118, 3))
+        self.line_2.setFrameShape(QtWidgets.QFrame.HLine)
+        self.line_2.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.line_2.setObjectName("line_2")
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
@@ -202,35 +209,6 @@ class Ui_Form(object):
         self.button_save.setText(_translate("Form", "Save Fig"))
         self.button_jump.setText(_translate("Form", "Jump"))
         self.label_jump.setText(_translate("Form", "Jump (sec):"))
-        self.label_split.setText(_translate("Form", "·\n"
-"·\n"
-"·\n"
-"·\n"
-"·\n"
-"·\n"
-"·\n"
-"·\n"
-"·\n"
-"·\n"
-"·\n"
-"·\n"
-"·\n"
-"·\n"
-"     ·  ·  ·  ·  ·  ·  ·  ·  · \n"
-"·\n"
-"·\n"
-"·\n"
-"·\n"
-"·\n"
-"·\n"
-"·\n"
-"·\n"
-"·\n"
-"·\n"
-"·\n"
-"·\n"
-"·\n"
-""))
         self.label_view.setText(_translate("Form", "View log:"))
         self.button_planner.setText(_translate("Form", "Planner"))
         self.button_robotcom.setText(_translate("Form", "Robotcom"))

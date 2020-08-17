@@ -139,9 +139,6 @@ class Ui_Form(object):
         self.lineEdit_jump = QtWidgets.QLineEdit(Form)
         self.lineEdit_jump.setGeometry(QtCore.QRect(140, 382, 61, 21))
         self.lineEdit_jump.setObjectName("lineEdit_jump")
-        self.label_split = QtWidgets.QLabel(Form)
-        self.label_split.setGeometry(QtCore.QRect(290, 22, 121, 391))
-        self.label_split.setObjectName("label_split")
         self.label_view = QtWidgets.QLabel(Form)
         self.label_view.setGeometry(QtCore.QRect(310, 15, 111, 16))
         self.label_view.setObjectName("label_view")
@@ -168,6 +165,16 @@ class Ui_Form(object):
         self.label_other = QtWidgets.QLabel(Form)
         self.label_other.setGeometry(QtCore.QRect(310, 270, 111, 16))
         self.label_other.setObjectName("label_other")
+        self.line = QtWidgets.QFrame(Form)
+        self.line.setGeometry(QtCore.QRect(284, 30, 20, 391))
+        self.line.setFrameShape(QtWidgets.QFrame.VLine)
+        self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.line.setObjectName("line")
+        self.line_2 = QtWidgets.QFrame(Form)
+        self.line_2.setGeometry(QtCore.QRect(294, 256, 118, 3))
+        self.line_2.setFrameShape(QtWidgets.QFrame.HLine)
+        self.line_2.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.line_2.setObjectName("line_2")
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
@@ -202,35 +209,6 @@ class Ui_Form(object):
         self.button_save.setText(_translate("Form", "Save Fig"))
         self.button_jump.setText(_translate("Form", "Jump"))
         self.label_jump.setText(_translate("Form", "Jump (sec):"))
-        self.label_split.setText(_translate("Form", "·\n"
-"·\n"
-"·\n"
-"·\n"
-"·\n"
-"·\n"
-"·\n"
-"·\n"
-"·\n"
-"·\n"
-"·\n"
-"·\n"
-"·\n"
-"·\n"
-"     ·  ·  ·  ·  ·  ·  ·  ·  · \n"
-"·\n"
-"·\n"
-"·\n"
-"·\n"
-"·\n"
-"·\n"
-"·\n"
-"·\n"
-"·\n"
-"·\n"
-"·\n"
-"·\n"
-"·\n"
-""))
         self.label_view.setText(_translate("Form", "View log:"))
         self.button_planner.setText(_translate("Form", "Planner"))
         self.button_robotcom.setText(_translate("Form", "Robotcom"))
