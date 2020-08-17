@@ -140,7 +140,7 @@ class Ui_Form(object):
         self.lineEdit_jump.setGeometry(QtCore.QRect(140, 382, 61, 21))
         self.lineEdit_jump.setObjectName("lineEdit_jump")
         self.label_split = QtWidgets.QLabel(Form)
-        self.label_split.setGeometry(QtCore.QRect(290, 10, 111, 391))
+        self.label_split.setGeometry(QtCore.QRect(290, 10, 10, 391))
         self.label_split.setObjectName("label_split")
         self.label_view = QtWidgets.QLabel(Form)
         self.label_view.setGeometry(QtCore.QRect(310, 15, 111, 16))
