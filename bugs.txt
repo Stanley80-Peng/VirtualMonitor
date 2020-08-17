@@ -1,1 +1,0 @@
-open log not in the correct line but in the same file

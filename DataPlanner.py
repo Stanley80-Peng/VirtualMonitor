@@ -12,7 +12,7 @@ class DataPlanner(object):
 
     @staticmethod
     def delete_existed_files():
-        if not os.path.isdir('positions') and os.path.isdir('positions/planner'):
+        if not os.path.exists('positions') or not os.path.exists('positions/planner'):
             return
         files = os.listdir('positions/planner')
         for file in files:
@@ -51,11 +51,11 @@ def proc_file(path, filename):
             other_list[len(x_list) - 1] = 'load'
 
     def write_csv(name):  # 把有用的数据写到positions文件夹内的csv文件中
-        if not os.path.exists('./positions'):
-            os.mkdir('./positions')
-        if not os.path.exists('./positions/planner'):
-            os.mkdir('./positions/planner')
-        out_file = open('./positions/planner/' + name + '.csv', 'w', encoding='UTF-8')
+        if not os.path.exists('positions'):
+            os.mkdir('positions')
+        if not os.path.exists('positions/planner'):
+            os.mkdir('positions/planner')
+        out_file = open('positions/planner/' + name + '.csv', 'w', encoding='UTF-8')
         for i in range(len(x_list)):
             out_file.write(day_list[i] + ',')
             out_file.write(time_list[i] + ',')
@@ -88,4 +88,4 @@ def proc_file(path, filename):
 
 
 if __name__ == '__main__':
-    data = DataPlanner('../planner')
+    data = DataPlanner('planner')
