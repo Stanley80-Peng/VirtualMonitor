@@ -180,9 +180,9 @@ class AnimatePlanner(object):
             files = sorted(os.listdir(log_path))
             time_tup = str(self.time_list[self.end_index]).split(':')
             if identifier == 'planner' or identifier == 'slamNode' or identifier == 'robotcomm':
-                date_time = str(self.day_num) + ' ' + time_tup[0] + ':' + time_tup[1] + ':' + time_tup[2][0:1]
+                date_time = str(self.day_num) + ' ' + time_tup[0] + ':' + time_tup[1]
             else:
-                date_time = str(self.day_num) + ' ' + time_tup[0] + ':' + time_tup[1][0:1]
+                date_time = str(self.day_num) + ' ' + time_tup[0]
             # print(date_time)
             for file in files:
                 if re.search('INFO', str(file)) and re.search(identifier, str(file)) and re.search('log', str(file)):
@@ -202,6 +202,7 @@ class AnimatePlanner(object):
                                               str(file) + ':' + str(line_count)
                                     os.system(command=command)
                                     return
+            print('cannot find' + date_time + 'in selected folder')
 
         def planner():
             if not os.path.isdir(self.planner_path):
